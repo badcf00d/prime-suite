@@ -33,7 +33,7 @@ module primeMod                                                         ! Essent
         end if
 
         !$OMP PARALLEL DO                                               ! Creates multiple threads, compile with -fopenmp
-        do divisor = 5, testLimit, 6                                    ! Equivalent to: for (i = 5; i < j; j += 6)
+        do divisor = 5, testLimit, 6                                    ! Loop from divisor = 6 to testLimit (inclusive), increment by 6
             if (mod(testNum, divisor) == 0) then                        ! Test if it divides by the divisor (i.e 6k - 1)
                 if (verbose) write(*,*) 'divides by', divisor
                 isPrime = .false.
@@ -59,7 +59,7 @@ module primeMod                                                         ! Essent
         allocate(primeList(maxNumber))                                  ! We won't actually need this much memory because not every number will be prime
         numPrimes = 0
 
-        do i = 1, maxNumber                                             ! Loop from i = 1 to i = maxNumber, increment i by 1 (default)
+        do i = 1, maxNumber                                             ! Loop from i = 1 to i = maxNumber (inclusive), increment i by 1 (default)
             isPrime = findFactors(i, .false.)                           ! Is this number prime?
 
             if (isPrime .eqv. .true.) then
