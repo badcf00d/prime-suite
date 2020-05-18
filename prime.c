@@ -15,9 +15,9 @@ int* primeList;                                                         // Point
    means that factors of factors will not be displayed, i.e. if the test
    number is a factor of 2, it will not show 4, 6, 8 etc. 
 */
-static bool findFactors(int testNum, bool verbose)
+static bool findFactors(const int testNum, bool verbose)
 {
-    int testLimit = (int) sqrt((double) testNum);                       // Local variable
+    int const testLimit = (int) floor(sqrt((double) testNum));                 // Local constant variable
     bool isPrime = true;
 
     if (testNum <= 3)
@@ -40,7 +40,7 @@ static bool findFactors(int testNum, bool verbose)
     }
 
     #pragma omp parallel for                                            // Creates multiple threads, compile with -fopenmp
-    for (int divisor = 5; divisor <= testLimit; divisor += 6)           // Loop from divisor = 6 to testLimit (inclusive), increment by 6
+    for (int divisor = 5; divisor <= testLimit; divisor += 6)           // Loop from divisor = 5 to testLimit (inclusive), increment by 6
     {
         if ((testNum % divisor) == 0)                                   // Test if it divides by the divisor (i.e. 6k - 1)
         {                           
@@ -62,7 +62,7 @@ static bool findFactors(int testNum, bool verbose)
 /* 
    Helper function for calculating all prime numbers up to maxNumber
 */
-static int primeListTest(int maxNumber)
+static int primeListTest(const int maxNumber)
 {
     int numPrimes = 0;
     bool isPrime;

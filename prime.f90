@@ -15,7 +15,7 @@ module primeMod                                                         ! Essent
         logical, intent(in) :: verbose
         logical             :: isPrime
 
-        testLimit = int(dsqrt(dble(testNum)))                           ! Explicitly casting to avoid warnings
+        testLimit = int(floor(dsqrt(dble(testNum))))                    ! Explicitly casting to avoid warnings
         isPrime = .true.                                                ! .xxx. is a logical operator
 
         if (testNum <= 3) then
@@ -33,7 +33,7 @@ module primeMod                                                         ! Essent
         end if
 
         !$OMP PARALLEL DO                                               ! Creates multiple threads, compile with -fopenmp
-        do divisor = 5, testLimit, 6                                    ! Loop from divisor = 6 to testLimit (inclusive), increment by 6
+        do divisor = 5, testLimit, 6                                    ! Loop from divisor = 5 to testLimit (inclusive), increment by 6
             if (mod(testNum, divisor) == 0) then                        ! Test if it divides by the divisor (i.e 6k - 1)
                 if (verbose) write(*,*) 'divides by', divisor
                 isPrime = .false.
