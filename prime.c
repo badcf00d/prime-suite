@@ -27,15 +27,13 @@ static bool findFactors(const int testNum, bool verbose)
     }
     else 
     {
-        if ((testNum % 2) == 0) 
+        for (int i = 2; i <= 3; i++)                                    // Test for divisibility by 2 and 3
         {
-            isPrime = false;
-            if (verbose) printf("divides by 2");
-        }
-        if ((testNum % 3) == 0) 
-        {
-            isPrime = false;
-            if (verbose) printf("divides by 3");
+            if ((testNum % i) == 0) 
+            {
+                isPrime = false;
+                if (verbose) printf("divides by %d", i);
+            }
         }
     }
 

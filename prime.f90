@@ -22,14 +22,12 @@ module primeMod                                                         ! Essent
             isPrime = (testNum > 1)
             if (verbose) write(*,*) 'Special case', testNum             ! The first * means write to stdout, the next * means auto-format
         else 
-            if (mod(testNum, 2) == 0) then
-                isPrime = .false.
-                if (verbose) write(*,*) 'divides by 2'                      
-            end if
-            if (mod(testNum, 3) == 0) then
-                isPrime = .false.
-                if (verbose) write(*,*) 'divides by 3'
-            end if
+            do divisor = 2, 3                                           ! Test for divisibility by 2 and 3
+                if (mod(testNum, divisor) == 0) then                    
+                    isPrime = .false.
+                    if (verbose) write(*,*) 'divides by ', divisor
+                end if   
+            end do
         end if
 
         !$OMP PARALLEL DO                                               ! Creates multiple threads, compile with -fopenmp
