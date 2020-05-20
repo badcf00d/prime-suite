@@ -34,7 +34,7 @@ def primeListTest(maxNumber):
     global primeList
 
     numProcessors = multiprocessing.cpu_count()                                 # Gets the number of threads of the CPU
-    numberList = range(0, maxNumber + 1)                                        # Prepares a list from 0 to maxNumber (inclusive)
+    numberList = range(1, maxNumber + 1)                                        # Prepares a list from 0 to maxNumber (inclusive)
     primeList = [0] * maxNumber                                                 # This isn't quite the same as dynamic memory allocation, but creates an array of maxNumber elements
     numPrimes = 0                                                               # Arrays start at 0 in Python
 
@@ -59,12 +59,12 @@ def main():
     apparentTime = sysFinish - sysStart
 
     print("Generated %d primes, Largest was: %d " % (numPrimes, primeList[numPrimes - 1]))
-    print("Apparent time = %7.3f seconds\n" % (apparentTime))
+    print("Apparent time = %7.3f seconds" % (apparentTime))
 
     # In all the other examples I measure CPU time directly but it's 
     # really complicated to do that with the multiprocessing module
     # so I've just done a rough guess for the Python version
-    print("~ CPU time = %7.3f seconds\n" % (apparentTime * multiprocessing.cpu_count()))
+    print("~ CPU time = %7.3f seconds" % (apparentTime * multiprocessing.cpu_count()))
 
 
 
