@@ -62,10 +62,10 @@ static bool findFactors(const int testNum, bool verbose)
 static int primeListTest(const int maxNumber)
 {
     omp_lock_t mutexLock;                                               // Variable to hold a mutex lock for the upcoming parallel loop
-    int numPrimes = 0;
+    int numPrimes = 0, j = 0;
     bool isPrime;
 
-    primeList = malloc(maxNumber * sizeof(int));                        // Dynamic memory allocation - won't actually need this much memory because not every number will be prime
+    primeList = calloc(maxNumber, sizeof(int));                         // Dynamic memory allocation & initialize to 0 - won't actually need this much memory because not every number will be prime
     omp_init_lock(&mutexLock);                                          // Initialize the mutex lock
 
     #pragma omp parallel for                                            // Uses OpenMP to create multiple threads to run this loop in parallel
@@ -75,9 +75,18 @@ static int primeListTest(const int maxNumber)
         if (isPrime == true)
         {
             omp_set_lock(&mutexLock);                                   // Take the mutex lock to prevent another thread from overwriting our changes
-            primeList[numPrimes] = i;                                   // Arrays start at 0 in C
+            primeList[i] = i;                                           // Arrays start at 0 in C
             numPrimes++;
             omp_unset_lock(&mutexLock);                                 // Give the mutex lock back to allow other threads access again
+        }
+    }
+
+    for (int i = 0; i < maxNumber; i++)                                 // This loop essentially removes the blanks and bunches all the primes up next to eachother in primeList
+    {
+        if (primeList[i] != 0)
+        {
+            primeList[j] = primeList[i];
+            j++;
         }
     }
 

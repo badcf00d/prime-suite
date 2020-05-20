@@ -1,4 +1,5 @@
 module primeMod                                                         ! Essentially like a class
+    use omp_lib
     implicit none                                                       ! Don't allow implicit data types
     integer, dimension(:), allocatable  :: primeList
     public                              :: primeList                    ! Allows access to anything that uses primeMod
@@ -30,7 +31,6 @@ module primeMod                                                         ! Essent
             end do
         end if
 
-        !$OMP PARALLEL DO                                               ! Creates multiple threads, compile with -fopenmp
         do divisor = 5, testLimit, 6                                    ! Loop from divisor = 5 to testLimit (inclusive), increment by 6
             if (mod(testNum, divisor) == 0) then                        ! Test if it divides by the divisor (i.e 6k - 1)
                 if (verbose) write(*,*) 'divides by', divisor
@@ -42,7 +42,6 @@ module primeMod                                                         ! Essent
                 isPrime = .false.
             end if
         end do
-        !$OMP END PARALLEL DO
     end function findFactors
 
 
@@ -50,22 +49,40 @@ module primeMod                                                         ! Essent
     ! Helper function for calculating all prime numbers up to maxNumber
     !
     function primeListTest(maxNumber) result(numPrimes)
-        integer, intent(in) :: maxNumber
-        integer             :: i, numPrimes
-        logical             :: isPrime
+        integer, intent(in)         :: maxNumber
+        integer                     :: numPrimes, i, j
+        integer(kind=omp_lock_kind) :: mutexLock
+        logical                     :: isPrime
 
         allocate(primeList(maxNumber))                                  ! Dynamic memory allocation - won't actually need this much memory because not every number will be prime
+        call omp_init_lock(mutexLock)
         numPrimes = 0
 
+        !$omp parallel do                                             ! Creates multiple threads, compile with -fopenmp
         do i = 1, maxNumber                                             ! Loop from i = 1 to i = maxNumber (inclusive), increment i by 1 (default)
             isPrime = findFactors(i, .false.)                           ! Is this number prime?
 
             if (isPrime .eqv. .true.) then
-                primeList(numPrimes + 1) = i                            ! Arrays start at 1 in fortran
+                call omp_set_lock(mutexLock)
                 numPrimes = numPrimes + 1
+                primeList(i) = i                                ! Arrays start at 1 in fortran
+                call omp_unset_lock(mutexLock)
+            else
+                primeList(i) = 0
             end if
         end do
-    end function primeListTest  
+        !$omp end parallel do
+
+        j = 1
+        do i = 1, maxNumber
+            if (primeList(i) /= 0) then
+                primeList(j) = primeList(i)
+                j = j + 1
+            end if
+        end do
+
+        call omp_destroy_lock(mutexLock)
+    end function primeListTest
 end module primeMod
 
 
