@@ -5,17 +5,6 @@ import itertools
 primeList = [0]
 
 
-def findFactorsLoop(testNum, divisor, verbose):
-    isPrime = True
-
-    if ((testNum % divisor) == 0):                                  # Test if it divides by the divisor (i.e. 6k - 1)
-        if (verbose): print("%d divides by %d" % (testNum, divisor))
-        isPrime = False
-    if ((testNum % (divisor + 2)) == 0):                    # Test if it divides by the divisor + 2 (i.e. 6k + 1)
-        if (verbose): print("%d divides by %d" % (testNum, divisor + 2))
-        isPrime = False
-
-    return isPrime
 
 def findFactors(testNum, verbose):
     isPrime = True
@@ -30,20 +19,13 @@ def findFactors(testNum, verbose):
                 isPrime = False
                 if (verbose): print("%d divides by %d" % (testNum, i))
 
-    divisorList = list(range(5, testLimit + 1, 6))
-
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        for i, isPrimeLoop in zip(divisorList, executor.map(findFactorsLoop, itertools.repeat(testNum), divisorList, itertools.repeat(False))):
-            if (isPrimeLoop == False):
-                isPrime = False
-
-    #for divisor in range(5, testLimit + 1, 6):
-    #    if ((testNum % divisor) == 0):                                  # Test if it divides by the divisor (i.e. 6k - 1)
-    #        if (verbose): print("%d divides by %d" % (testNum, divisor))
-    #        isPrime = False
-    #    if ((testNum % (divisor + 2)) == 0):                    # Test if it divides by the divisor + 2 (i.e. 6k + 1)
-    #        if (verbose): print("%d divides by %d" % (testNum, divisor + 2))
-    #        isPrime = False
+    for divisor in range(5, testLimit + 1, 6):
+        if ((testNum % divisor) == 0):                                  # Test if it divides by the divisor (i.e. 6k - 1)
+            if (verbose): print("%d divides by %d" % (testNum, divisor))
+            isPrime = False
+        if ((testNum % (divisor + 2)) == 0):                    # Test if it divides by the divisor + 2 (i.e. 6k + 1)
+            if (verbose): print("%d divides by %d" % (testNum, divisor + 2))
+            isPrime = False
 
     return isPrime
 
@@ -52,21 +34,15 @@ def findFactors(testNum, verbose):
 def primeListTest(maxNumber):
     global primeList
     primeList = [0] * maxNumber
-    #numberList = list(range(0, maxNumber + 1))
+    numberList = list(range(0, maxNumber + 1))
     numPrimes = 0
 
-    #with concurrent.futures.ThreadPoolExecutor() as executor:
-    #    for i, isPrime in zip(numberList, executor.map(findFactors, numberList, itertools.repeat(False))):
-    #        if (isPrime == True):
-    #            primeList[numPrimes] = i                                    # Arrays start at 0 in C
-    #            numPrimes += 1
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        for i, isPrime in zip(numberList, executor.map(findFactors, numberList, itertools.repeat(False))):
+            if (isPrime == True):
+                primeList[numPrimes] = i                                    # Arrays start at 0 in C
+                numPrimes += 1
 
-
-    for i in range(0, maxNumber + 1):                                                                
-        isPrime = findFactors(i, False)
-        if (isPrime == True):
-            primeList[numPrimes] = i                                    # Arrays start at 0 in C
-            numPrimes += 1
     return numPrimes
 
 
