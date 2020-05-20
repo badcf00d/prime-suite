@@ -7,7 +7,7 @@ primeList = [0]                                                                 
 
 def findFactors(testNum, verbose):
     isPrime = True
-    testLimit = math.floor(math.sqrt(testNum))                                      # Local constant variable
+    testLimit = math.floor(math.sqrt(testNum))                                  # Local constant variable
 
     if (testNum <= 3):
         isPrime = (testNum > 1)    
@@ -43,7 +43,7 @@ def primeListTest(maxNumber):
                           zip(numberList, itertools.repeat(False)))):           # zip makes a single list out of separate arguments, p.starmap calls findFactors with those arguments
             if (isPrime == True):
                 primeList[numPrimes] = i                                        # Arrays start at 0 in Python
-                numPrimes += 1
+                numPrimes += 1                                                  # We don't need mutex locks here because they are completely separate processes with their own memory
 
     return numPrimes
 
