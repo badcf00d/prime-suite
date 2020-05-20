@@ -7,7 +7,7 @@ SRC_DIR := .
 OBJ_DIR := .
 
 F90SRC := $(wildcard $(SRC_DIR)/*.f90)
-F90OBJ := $(F90SRC:$(SRC_DIR)/%.f90=$(OBJ_DIR)/%.f90.o)
+F90OBJ := $(F90SRC:$(SRC_DIR)/%.f90=$(OBJ_DIR)/%.fortran.o)
 F90ASM := $(F90SRC:$(SRC_DIR)/%.f90=$(OBJ_DIR)/%.s)
 F90MOD := $(wildcard $(SRC_DIR)/*.mod)
 
@@ -38,7 +38,7 @@ $(COUT): $(COBJ)
 
 
 
-$(OBJ_DIR)/%.f90.o: $(SRC_DIR)/%.f90
+$(OBJ_DIR)/%.fortran.o: $(SRC_DIR)/%.f90
 	$(FC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c
