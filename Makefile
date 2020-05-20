@@ -38,7 +38,7 @@ $(COUT): $(COBJ)
 
 
 
-$(OBJ_DIR)/%.fort.o: $(SRC_DIR)/%.f90
+$(OBJ_DIR)/%.f90.o: $(SRC_DIR)/%.f90
 	$(FC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c
