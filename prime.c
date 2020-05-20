@@ -17,7 +17,7 @@ int* primeList;                                                         // Point
 */
 static bool findFactors(const int testNum, bool verbose)
 {
-    int const testLimit = (int) floor(sqrt((double) testNum));                 // Local constant variable
+    int const testLimit = (int) floor(sqrt((double) testNum));          // Local constant variable
     bool isPrime = true;
 
     if (testNum <= 3)
@@ -39,7 +39,7 @@ static bool findFactors(const int testNum, bool verbose)
 
     #pragma omp parallel for                                            // Creates multiple threads, compile with -fopenmp
     for (int divisor = 5; divisor <= testLimit; divisor += 6)           // Loop from divisor = 5 to testLimit (inclusive), increment by 6
-    {
+    {      
         if ((testNum % divisor) == 0)                                   // Test if it divides by the divisor (i.e. 6k - 1)
         {                           
             if (verbose) printf("divides by %d", divisor); 
@@ -65,7 +65,7 @@ static int primeListTest(const int maxNumber)
     int numPrimes = 0;
     bool isPrime;
 
-    primeList = malloc(maxNumber * sizeof(int));                        // We won't actually need this much memory because not every number will be prime
+    primeList = malloc(maxNumber * sizeof(int));                        // Dynamic memory allocation - won't actually need this much memory because not every number will be prime
 
     for (int i = 1; i <= maxNumber; i++)                                // Loop from i = 1 to maxNumber (inclusive), increment by 1 
     {                                                                   
@@ -92,7 +92,7 @@ int main()
     clock_t cpuStart, cpuFinish;
 
     printf("Generate all primes up to: ");
-    scanf("%d", &maxNumber);
+    scanf("%d", &maxNumber);                                            // Read from stdin as a number (%d)
     
     gettimeofday(&sysStart, NULL);                                      // Get the system time, this will be the apparent runtime
     cpuStart = clock();                                                 // Get the cpu time, this will be the cpu runtime

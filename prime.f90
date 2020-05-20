@@ -54,7 +54,7 @@ module primeMod                                                         ! Essent
         integer             :: i, numPrimes
         logical             :: isPrime
 
-        allocate(primeList(maxNumber))                                  ! We won't actually need this much memory because not every number will be prime
+        allocate(primeList(maxNumber))                                  ! Dynamic memory allocation - won't actually need this much memory because not every number will be prime
         numPrimes = 0
 
         do i = 1, maxNumber                                             ! Loop from i = 1 to i = maxNumber (inclusive), increment i by 1 (default)

@@ -6,31 +6,32 @@ LDFLAGS := -fopenmp -lm
 SRC_DIR := .
 OBJ_DIR := .
 
-FORSRC := $(wildcard $(SRC_DIR)/*.f90)
-FOROBJ := $(FORSRC:$(SRC_DIR)/%.f90=$(OBJ_DIR)/%.fort.o)
-FORASM := $(FORSRC:$(SRC_DIR)/%.f90=$(OBJ_DIR)/%.s)
-FORMOD := $(wildcard $(SRC_DIR)/*.mod)
+F90SRC := $(wildcard $(SRC_DIR)/*.f90)
+F90OBJ := $(F90SRC:$(SRC_DIR)/%.f90=$(OBJ_DIR)/%.f90.o)
+F90ASM := $(F90SRC:$(SRC_DIR)/%.f90=$(OBJ_DIR)/%.s)
+F90MOD := $(wildcard $(SRC_DIR)/*.mod)
 
 CSRC := $(wildcard $(SRC_DIR)/*.c)
 COBJ := $(CSRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.c.o)
 CASM := $(CSRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.s)
 CPRE := $(CSRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.i)
+CCBC := $(CSRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.bc)
 
 ifeq ($(OS),Windows_NT)
-	FOROUT := fortran-prime.exe
+	F90OUT := fortran-prime.exe
 	COUT := c-prime.exe
 else
-	FOROUT := fortran-prime
+	F90OUT := fortran-prime
 	COUT := c-prime
 endif
 
 .PHONY: clean all 
 
-all: $(FOROUT) $(COUT)
+all: $(F90OUT) $(COUT)
 
 
-$(FOROUT): $(FOROBJ)
-	$(FC) $^ $(LDFLAGS) -o $(FOROUT)
+$(F90OUT): $(F90OBJ)
+	$(FC) $^ $(LDFLAGS) -o $(F90OUT)
 
 $(COUT): $(COBJ)
 	$(CC) $^ $(LDFLAGS) -o $(COUT)
@@ -44,4 +45,4 @@ $(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(FOROBJ) $(FOROUT) $(FORASM) $(FORMOD) $(COBJ) $(COUT) $(CASM) $(CPRE)
+	rm -f $(F90OBJ) $(F90OUT) $(F90ASM) $(F90MOD) $(COBJ) $(COUT) $(CASM) $(CPRE) $(CCBC)
