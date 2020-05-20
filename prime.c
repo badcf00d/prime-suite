@@ -4,7 +4,7 @@
 #include <math.h>                                                       // Gives us math functions like sqrt
 #include <sys/time.h>                                                   // Gives us gettimeofday
 #include <time.h>                                                       // Gives us CPU clock functions
-
+#include <omp.h>                                                        // Gives us OpenMP mutex locks
 
 int* primeList;                                                         // Pointer variable accessible to anything in this file
 
@@ -37,7 +37,6 @@ static bool findFactors(const int testNum, bool verbose)
         }
     }
 
-    #pragma omp parallel for                                            // Creates multiple threads, compile with -fopenmp
     for (int divisor = 5; divisor <= testLimit; divisor += 6)           // Loop from divisor = 5 to testLimit (inclusive), increment by 6
     {      
         if ((testNum % divisor) == 0)                                   // Test if it divides by the divisor (i.e. 6k - 1)
@@ -64,19 +63,25 @@ static int primeListTest(const int maxNumber)
 {
     int numPrimes = 0;
     bool isPrime;
+    omp_lock_t mutexLock;
+    omp_init_lock(&mutexLock);                                          // Create a mutex lock for the upcoming loop
 
     primeList = malloc(maxNumber * sizeof(int));                        // Dynamic memory allocation - won't actually need this much memory because not every number will be prime
-
+    
+    #pragma omp parallel for                                            // Creates multiple threads, compile with -fopenmp
     for (int i = 1; i <= maxNumber; i++)                                // Loop from i = 1 to maxNumber (inclusive), increment by 1 
     {                                                                   
         isPrime = findFactors(i, false);
         if (isPrime == true)
         {
+            omp_set_lock(&mutexLock);                                   // Take the mutex lock to prevent another thread from overwriting our changes
             primeList[numPrimes] = i;                                   // Arrays start at 0 in C
             numPrimes++;
+            omp_unset_lock(&mutexLock);                                 // Give the mutex lock back to allow other threads access again
         }
     }
 
+    omp_destroy_lock(&mutexLock);                                       // Get rid of our mutex lock, no longer needed
     return numPrimes;
 }
 
