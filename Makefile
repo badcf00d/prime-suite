@@ -1,7 +1,9 @@
 FC := gfortran
 CC := gcc
-CFLAGS := -Wall -O2 -fopenmp -march=native -masm=intel -fverbose-asm --save-temps
-LDFLAGS := -fopenmp -lm
+CFLAGS := -Wall -O2 -fopenmp -march=native -fverbose-asm
+LDFLAGS := -fopenmp -lm 
+GEN_PROFILE_CFLAGS = -fprofile-generate -fprofile-update=single -pg
+USE_PROFILE_CFLAGS = -fprofile-use -Wno-error=coverage-mismatch
 
 SRC_DIR := .
 OBJ_DIR := .
@@ -25,7 +27,7 @@ else
 	COUT := c-prime
 endif
 
-.PHONY: clean all 
+.PHONY: clean all generate-profile use-profile
 
 all: $(F90OUT) $(COUT)
 
@@ -46,3 +48,13 @@ $(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c
 
 clean:
 	rm -f $(F90OBJ) $(F90OUT) $(F90ASM) $(F90MOD) $(COBJ) $(COUT) $(CASM) $(CPRE) $(CCBC)
+
+
+generate-profile: CFLAGS += $(GEN_PROFILE_CFLAGS)
+generate-profile: LDFLAGS += $(GEN_PROFILE_CFLAGS)
+generate-profile: all
+
+
+use-profile: CFLAGS += $(USE_PROFILE_CFLAGS)
+use-profile: LDFLAGS += $(USE_PROFILE_CFLAGS)
+use-profile: all
