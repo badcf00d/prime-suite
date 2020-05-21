@@ -68,7 +68,7 @@ static int primeListTest(const int maxNumber)
     primeList = calloc(maxNumber, sizeof(int));                         // Dynamic memory allocation & initialize to 0 - won't actually need this much memory because not every number will be prime
     omp_init_lock(&mutexLock);                                          // Initialize the mutex lock
 
-    #pragma omp parallel for                                            // Uses OpenMP to create multiple threads to run this loop in parallel
+    #pragma omp parallel for schedule(guided)                           // Uses OpenMP to create multiple threads to run this loop in parallel
     for (int i = 1; i <= maxNumber; i++)                                // Loop from i = 1 to maxNumber (inclusive), increment by 1 
     {                                                                   
         isPrime = findFactors(i, false);                                // Is this number (i) prime?
@@ -118,7 +118,7 @@ int main()
     apparentTime = sysTimeDiff.tv_sec + (sysTimeDiff.tv_usec * 1e-6);
     cpuTime = ((float) (cpuFinish - cpuStart)) / CLOCKS_PER_SEC;
 
-    printf("\nGenerated %d primes, Largest was: %d \n", numPrimes, primeList[numPrimes - 1]);
+    printf("Generated %d primes, Largest was: %d \n", numPrimes, primeList[numPrimes - 1]);
     printf("Apparent time = %7.3f seconds\n", apparentTime);
     printf("CPU time = %12.6f seconds\n", cpuTime);
 

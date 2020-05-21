@@ -58,14 +58,13 @@ module primeMod                                                         ! Essent
         call omp_init_lock(mutexLock)
         numPrimes = 0
 
-        !$omp parallel do                                             ! Creates multiple threads, compile with -fopenmp
+        !$omp parallel do schedule(guided)                              ! Creates multiple threads, compile with -fopenmp
         do i = 1, maxNumber                                             ! Loop from i = 1 to i = maxNumber (inclusive), increment i by 1 (default)
             isPrime = findFactors(i, .false.)                           ! Is this number prime?
-
             if (isPrime .eqv. .true.) then
                 call omp_set_lock(mutexLock)
                 numPrimes = numPrimes + 1
-                primeList(i) = i                                ! Arrays start at 1 in fortran
+                primeList(i) = i                                        ! Arrays start at 1 in fortran
                 call omp_unset_lock(mutexLock)
             else
                 primeList(i) = 0
