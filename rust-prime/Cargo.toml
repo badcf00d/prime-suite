@@ -1,0 +1,13 @@
+[package]
+name = "rust-prime"
+version = "0.1.0"
+authors = ["Peter Frost <frosticless@hotmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name="prime"
+
+[dependencies]
+cpu-time = "1.0.0"

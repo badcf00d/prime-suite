@@ -30,7 +30,7 @@ endif
 .PHONY: clean all generate-profile use-profile
 
 all: $(F90OUT) $(COUT)
-
+	cd rust-prime && cargo build --release
 
 $(F90OUT): $(F90OBJ)
 	$(FC) $^ $(LDFLAGS) -o $(F90OUT)
