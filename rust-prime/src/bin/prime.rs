@@ -2,6 +2,7 @@
 use std::time::{Instant};
 use cpu_time::ProcessTime;
 use std::io::{stdin,stdout,Write};
+use rayon::prelude::*;
 
 
 
@@ -50,15 +51,22 @@ fn findFactors(testNum:i32, verbose:bool) -> bool
 fn primeListTest(maxNumber:i32) -> (usize, Vec<usize>)
 {
     let mut numPrimes:usize = 0;
-    let mut isPrime:bool;
     let mut primeList = vec![0; maxNumber as usize];                    // Dynamic memory allocation & initialize to 0 - won't actually need this much memory because not every number will be prime
 
-    for i in 1..((maxNumber + 1) as usize)                              // Loop from i = 1 to maxNumber (inclusive), increment by 1 
-    {                                                                   
-        isPrime = findFactors(i as i32, false);                         // Is this number (i) prime?
-        if isPrime == true
+    primeList.par_iter_mut().enumerate().for_each(|(i, data)|           // Creates multiple threads that work on each element in primeList
         {
-            primeList[numPrimes] = i;                                   // Arrays start at 0 in Rust
+            if findFactors((i + 1) as i32, false) == true
+            {
+                *data = i + 1;
+            }
+        }
+    );
+
+    for i in 0..(maxNumber as usize)                                   // This loop essentially removes the blanks and bunches all the primes up next to eachother in primeList
+    {
+        if primeList[i] != 0
+        {
+            primeList[numPrimes] = primeList[i];
             numPrimes += 1;
         }
     }
