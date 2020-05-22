@@ -60,16 +60,14 @@ def main():
 
     print("Generated %d primes, Largest was: %d " % (numPrimes, primeList[numPrimes - 1]))
     print("Apparent time = %7.3f seconds" % (apparentTime))
-
+    print("~ CPU time = %7.3f seconds" % (apparentTime * multiprocessing.cpu_count()))
     # In all the other examples I measure CPU time directly but it's 
     # really complicated to do that with the multiprocessing module
     # so I've just done a rough guess for the Python version
-    print("~ CPU time = %7.3f seconds" % (apparentTime * multiprocessing.cpu_count()))
-
 
 
 if __name__ == "__main__":
     # When we call this script from the command line, __name__ will be __main__,
-    # if this is being imported and run from another python script, it will be 
+    # if this is being imported as a library from another python script, it will be 
     # something different, so main() won't get called
     main()
