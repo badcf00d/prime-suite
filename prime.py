@@ -1,10 +1,13 @@
-import time, math
-import multiprocessing, itertools
+import time, math                                                               # Gives us system timing functions and math functions like sqrt and floor
+import multiprocessing, itertools                                               # Gives us multithreading related functions 
 
 primeList = [0]                                                                 # Global variable that is a list [] of integers
 
 
-
+# Factor test by trial division using the 6k +- 1 optimisation, this
+# means that factors of factors will not be displayed, i.e. if the test
+# number is a factor of 2, it will not show 4, 6, 8 etc.
+#
 def findFactors(testNum, verbose):
     isPrime = True
     testLimit = math.floor(math.sqrt(testNum))                                  # Local constant variable
@@ -29,9 +32,10 @@ def findFactors(testNum, verbose):
     return isPrime
 
 
-
+# Helper function for calculating all prime numbers up to maxNumber
+#
 def primeListTest(maxNumber):
-    global primeList
+    global primeList                                                            # Specifies that we want to use the global variable rather than make a new one with the same name
 
     numProcessors = multiprocessing.cpu_count()                                 # Gets the number of threads of the CPU
     numberList = range(1, maxNumber + 1)                                        # Prepares a list from 0 to maxNumber (inclusive)

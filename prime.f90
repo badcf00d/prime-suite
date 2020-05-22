@@ -51,25 +51,23 @@ module primeMod                                                         ! Essent
     function primeListTest(maxNumber) result(numPrimes)
         integer, intent(in)         :: maxNumber
         integer                     :: numPrimes, i
-        logical                     :: isPrime
 
         allocate(primeList(maxNumber))                                  ! Dynamic memory allocation - won't actually need this much memory because not every number will be prime
 
         !$omp parallel do schedule(guided)                              ! Creates multiple threads, compile with -fopenmp
         do i = 1, maxNumber                                             ! Loop from i = 1 to i = maxNumber (inclusive), increment i by 1 (default)
-            isPrime = findFactors(i, .false.)                           ! Is this number prime?
-            if (isPrime .eqv. .true.) then
+            if (findFactors(i, .false.) .eqv. .true.) then              ! Is this number prime?
                 primeList(i) = i                                        ! Arrays start at 1 in fortran
             else
-                primeList(i) = 0
+                primeList(i) = 0                                        ! Otherwise set it to 0, this helps us in the loop after this one
             end if
         end do
         !$omp end parallel do
 
-        numPrimes = 0
+        numPrimes = 0                                                   ! This loop essentially removes the blanks and bunches all the primes up next to eachother in primeList
         do i = 1, maxNumber
             if (primeList(i) /= 0) then
-                numPrimes = numPrimes + 1
+                numPrimes = numPrimes + 1                               ! Count up the number of primes we found
                 primeList(numPrimes) = primeList(i)
             end if
         end do
@@ -82,7 +80,7 @@ end module primeMod
 
 
 program prime
-    use primeMod                                                        ! Works a bit like #include
+    use primeMod                                                        ! Includes the functions and data specified in the primeMod module above
     implicit none
     integer :: maxNumber, numPrimes, sysStart, sysFinish, sysClkRate
     real    :: cpuStart, cpuFinish, apparentTime, cpuTime

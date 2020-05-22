@@ -1,8 +1,8 @@
-#![allow(non_snake_case)]
-use std::time::{Instant};
-use cpu_time::ProcessTime;
-use std::io::{stdin,stdout,Write};
-use rayon::prelude::*;
+#![allow(non_snake_case)]                                               // Disables the warning about non snake case (e.g. hello_world) variables
+use std::io::{stdin,stdout,Write};                                      // Gives us printing and reading functions
+use std::time::{Instant};                                               // Gives us system timing functions
+use cpu_time::ProcessTime;                                              // Gives us CPU timing functions
+use rayon::prelude::*;                                                  // Gives us the rayon multithreading functions (e.g. par_iter_mut)
 
 
 
@@ -14,7 +14,7 @@ fn findFactors(testNum:i32, verbose:bool) -> bool
     if testNum <= 3
     {
         isPrime = testNum > 1;
-        if verbose { println!("Special case {}", testNum); }            // {} means print an argument
+        if verbose { println!("Special case {}", testNum); }            // {} means print an argument, a bit like % in C
     }
     else 
     {

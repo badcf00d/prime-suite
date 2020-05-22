@@ -4,17 +4,15 @@
 #include <math.h>                                                       // Gives us math functions like sqrt
 #include <sys/time.h>                                                   // Gives us gettimeofday
 #include <time.h>                                                       // Gives us CPU clock functions
-#include <omp.h>                                                        // Gives us OpenMP mutex locks
 
 int* primeList;                                                         // Pointer variable accessible to anything in this file
 
 
 
-/* 
-   Factor test by trial division using the 6k +- 1 optimisation, this
-   means that factors of factors will not be displayed, i.e. if the test
-   number is a factor of 2, it will not show 4, 6, 8 etc. 
-*/
+// Factor test by trial division using the 6k +- 1 optimisation, this
+// means that factors of factors will not be displayed, i.e. if the test
+// number is a factor of 2, it will not show 4, 6, 8 etc.
+//
 static bool findFactors(const int testNum, bool verbose)
 {
     int const testLimit = (int) floor(sqrt((double) testNum));          // Local constant variable
@@ -56,21 +54,19 @@ static bool findFactors(const int testNum, bool verbose)
 }
 
 
-/* 
-   Helper function for calculating all prime numbers up to maxNumber
-*/
+
+// Helper function for calculating all prime numbers up to maxNumber
+//
 static int primeListTest(const int maxNumber)
 {
     int numPrimes = 0;
-    bool isPrime;
 
     primeList = calloc(maxNumber, sizeof(int));                         // Dynamic memory allocation & initialize to 0 - won't actually need this much memory because not every number will be prime
 
     #pragma omp parallel for schedule(guided)                           // Uses OpenMP to create multiple threads to run this loop in parallel
     for (int i = 1; i <= maxNumber; i++)                                // Loop from i = 1 to maxNumber (inclusive), increment by 1 
     {                                                                   
-        isPrime = findFactors(i, false);                                // Is this number (i) prime?
-        if (isPrime == true)
+        if (findFactors(i, false) == true)                              // Is this number (i) prime?
         {
             primeList[i - 1] = i;                                       // Arrays start at 0 in C
         }
@@ -91,7 +87,8 @@ static int primeListTest(const int maxNumber)
 
 
 
-
+// main is the default name for the starting point of a program in C
+//
 int main() 
 {
     int maxNumber, numPrimes;
