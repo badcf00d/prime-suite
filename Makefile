@@ -48,6 +48,7 @@ $(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c
 
 clean:
 	rm -f $(F90OBJ) $(F90OUT) $(F90ASM) $(F90MOD) $(COBJ) $(COUT) $(CASM) $(CPRE) $(CCBC)
+	cd rust-prime && cargo clean
 
 
 generate-profile: CFLAGS += $(GEN_PROFILE_CFLAGS)
