@@ -60,10 +60,9 @@ def main():
 
     print("Generated %d primes, Largest was: %d " % (numPrimes, primeList[numPrimes - 1]))
     print("Apparent time = %7.3f seconds" % (apparentTime))
-    print("~ CPU time = %7.3f seconds" % (apparentTime * multiprocessing.cpu_count()))
     # In all the other examples I measure CPU time directly but it's 
     # really complicated to do that with the multiprocessing module
-    # so I've just done a rough guess for the Python version
+    # so I've left it out of the Python example
 
 
 if __name__ == "__main__":
