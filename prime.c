@@ -61,12 +61,10 @@ static bool findFactors(const int testNum, bool verbose)
 */
 static int primeListTest(const int maxNumber)
 {
-    omp_lock_t mutexLock;                                               // Variable to hold a mutex lock for the upcoming parallel loop
-    int numPrimes = 0, j = 0;
+    int numPrimes = 0;
     bool isPrime;
 
     primeList = calloc(maxNumber, sizeof(int));                         // Dynamic memory allocation & initialize to 0 - won't actually need this much memory because not every number will be prime
-    omp_init_lock(&mutexLock);                                          // Initialize the mutex lock
 
     #pragma omp parallel for schedule(guided)                           // Uses OpenMP to create multiple threads to run this loop in parallel
     for (int i = 1; i <= maxNumber; i++)                                // Loop from i = 1 to maxNumber (inclusive), increment by 1 
@@ -74,10 +72,7 @@ static int primeListTest(const int maxNumber)
         isPrime = findFactors(i, false);                                // Is this number (i) prime?
         if (isPrime == true)
         {
-            omp_set_lock(&mutexLock);                                   // Take the mutex lock to prevent another thread from overwriting our changes
             primeList[i] = i;                                           // Arrays start at 0 in C
-            numPrimes++;
-            omp_unset_lock(&mutexLock);                                 // Give the mutex lock back to allow other threads access again
         }
     }
 
@@ -85,12 +80,11 @@ static int primeListTest(const int maxNumber)
     {
         if (primeList[i] != 0)
         {
-            primeList[j] = primeList[i];
-            j++;
+            primeList[numPrimes] = primeList[i];
+            numPrimes++;                                                // Count up the number of primes we found
         }
     }
 
-    omp_destroy_lock(&mutexLock);                                       // Get rid of our mutex lock, no longer needed
     return numPrimes;
 }
 

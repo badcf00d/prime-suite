@@ -50,37 +50,30 @@ module primeMod                                                         ! Essent
     !
     function primeListTest(maxNumber) result(numPrimes)
         integer, intent(in)         :: maxNumber
-        integer                     :: numPrimes, i, j
-        integer(kind=omp_lock_kind) :: mutexLock
+        integer                     :: numPrimes, i
         logical                     :: isPrime
 
         allocate(primeList(maxNumber))                                  ! Dynamic memory allocation - won't actually need this much memory because not every number will be prime
-        call omp_init_lock(mutexLock)
-        numPrimes = 0
 
         !$omp parallel do schedule(guided)                              ! Creates multiple threads, compile with -fopenmp
         do i = 1, maxNumber                                             ! Loop from i = 1 to i = maxNumber (inclusive), increment i by 1 (default)
             isPrime = findFactors(i, .false.)                           ! Is this number prime?
             if (isPrime .eqv. .true.) then
-                call omp_set_lock(mutexLock)
-                numPrimes = numPrimes + 1
                 primeList(i) = i                                        ! Arrays start at 1 in fortran
-                call omp_unset_lock(mutexLock)
             else
                 primeList(i) = 0
             end if
         end do
         !$omp end parallel do
 
-        j = 1
+        numPrimes = 0
         do i = 1, maxNumber
             if (primeList(i) /= 0) then
-                primeList(j) = primeList(i)
-                j = j + 1
+                numPrimes = numPrimes + 1
+                primeList(numPrimes) = primeList(i)
             end if
         end do
 
-        call omp_destroy_lock(mutexLock)
     end function primeListTest
 end module primeMod
 
