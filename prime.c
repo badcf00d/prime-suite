@@ -72,7 +72,7 @@ static int primeListTest(const int maxNumber)
         isPrime = findFactors(i, false);                                // Is this number (i) prime?
         if (isPrime == true)
         {
-            primeList[i] = i;                                           // Arrays start at 0 in C
+            primeList[i - 1] = i;                                       // Arrays start at 0 in C
         }
     }
 
