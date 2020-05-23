@@ -1,5 +1,6 @@
 FC := gfortran
 CC := gcc
+JC := javac
 CFLAGS := -Wall -O2 -fopenmp -march=native -fverbose-asm
 LDFLAGS := -fopenmp -lm 
 GEN_PROFILE_CFLAGS = -fprofile-generate -fprofile-update=single -pg
@@ -19,17 +20,22 @@ CASM := $(CSRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.s)
 CPRE := $(CSRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.i)
 CCBC := $(CSRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.bc)
 
+JAVSRC := $(wildcard $(SRC_DIR)/*.java)
+JAVCLS := $(JAVSRC:$(SRC_DIR)/%.java=$(OBJ_DIR)/%.class)
+
 ifeq ($(OS),Windows_NT)
 	F90OUT := fortran-prime.exe
 	COUT := c-prime.exe
+	JAVOUT := prime.class
 else
 	F90OUT := fortran-prime
 	COUT := c-prime
+	JAVOUT := prime.class
 endif
 
 .PHONY: clean all generate-profile use-profile
 
-all: $(F90OUT) $(COUT)
+all: $(F90OUT) $(COUT) $(JAVOUT)
 	cd rust-prime && cargo build --release
 
 $(F90OUT): $(F90OBJ)
@@ -37,6 +43,9 @@ $(F90OUT): $(F90OBJ)
 
 $(COUT): $(COBJ)
 	$(CC) $^ $(LDFLAGS) -o $(COUT)
+
+$(JAVOUT): $(JAVSRC)
+	$(JC) $^
 
 
 
@@ -47,7 +56,7 @@ $(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(F90OBJ) $(F90OUT) $(F90ASM) $(F90MOD) $(COBJ) $(COUT) $(CASM) $(CPRE) $(CCBC)
+	rm -f $(F90OBJ) $(F90OUT) $(F90ASM) $(F90MOD) $(COBJ) $(COUT) $(CASM) $(CPRE) $(CCBC) $(JAVCLS)
 	cd rust-prime && cargo clean
 
 
