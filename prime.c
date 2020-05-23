@@ -61,7 +61,7 @@ static int primeListTest(const int maxNumber)
 {
     int numPrimes = 0;
 
-    primeList = calloc(maxNumber, sizeof(int));                         // Dynamic memory allocation & initialize to 0 - won't actually need this much memory because not every number will be prime
+    primeList = calloc(maxNumber, sizeof(int));                         // Dynamic memory allocation & initialize to 0
 
     #pragma omp parallel for schedule(guided)                           // Uses OpenMP to create multiple threads to run this loop in parallel
     for (int i = 1; i <= maxNumber; i++)                                // Loop from i = 1 to maxNumber (inclusive), increment by 1 
@@ -103,11 +103,11 @@ int main()
     cpuStart = clock();                                                 // Get the cpu time, this will be the cpu runtime
     numPrimes = primeListTest(maxNumber);                               // Calculates all prime numbers up to maxNumber
     cpuFinish = clock();                                                // Get finish cpu time
-    gettimeofday(&sysFinish, NULL);                                     // Get finish system time
+    gettimeofday(&sysFinish, NULL);                                     // Get the finishing system time
 
-    timersub(&sysFinish, &sysStart, &sysTimeDiff);
-    apparentTime = sysTimeDiff.tv_sec + (sysTimeDiff.tv_usec * 1e-6);
-    cpuTime = ((float) (cpuFinish - cpuStart)) / CLOCKS_PER_SEC;
+    timersub(&sysFinish, &sysStart, &sysTimeDiff);                      // Calculates the difference between sysStart and sysFinish
+    apparentTime = sysTimeDiff.tv_sec + (sysTimeDiff.tv_usec * 1e-6);   // Add up the total time taken
+    cpuTime = ((float) (cpuFinish - cpuStart)) / CLOCKS_PER_SEC;        // Convert the cpu ticks to seconds
 
     printf("Generated %d primes, Largest was: %d \n", numPrimes, primeList[numPrimes - 1]);
     printf("Apparent time = %7.3f seconds\n", apparentTime);

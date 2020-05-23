@@ -51,7 +51,7 @@ fn findFactors(testNum:i32, verbose:bool) -> bool
 fn primeListTest(maxNumber:i32) -> (usize, Vec<usize>)
 {
     let mut numPrimes:usize = 0;
-    let mut primeList = vec![0; maxNumber as usize];                    // Dynamic memory allocation & initialize to 0 - won't actually need this much memory because not every number will be prime
+    let mut primeList = vec![0; maxNumber as usize];                    // Dynamic memory allocation & initialize to 0
 
     primeList.par_iter_mut().enumerate().for_each(|(i, data)|           // Creates multiple threads that work on each element in primeList
         {
@@ -94,8 +94,8 @@ fn main()
     let sysStart = Instant::now();                                      // Get the system time, this will be the apparent runtime
     let cpuStart = ProcessTime::now();                                  // Get the cpu time, this will be the cpu runtime
     let (numPrimes, primeList) = primeListTest(maxNumber);              // Calculates all prime numbers up to maxNumber
-    let cpuTime = cpuStart.elapsed().as_secs_f64();                     // Get the cpu time since we started
-    let apparentTime = sysStart.elapsed().as_secs_f64();                // Get the system time since we started
+    let cpuTime = cpuStart.elapsed().as_secs_f64();                     // Get the cpu time elapsed since we started
+    let apparentTime = sysStart.elapsed().as_secs_f64();                // Get the system time elapsed since we started
 
     println!("Generated {} primes, Largest was: {}", numPrimes, primeList[(numPrimes - 1)]);
     println!("Apparent time = {:.3} seconds", apparentTime);

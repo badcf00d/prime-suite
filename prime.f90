@@ -52,7 +52,7 @@ module primeMod                                                         ! Essent
         integer, intent(in)         :: maxNumber
         integer                     :: numPrimes, i
 
-        allocate(primeList(maxNumber))                                  ! Dynamic memory allocation - won't actually need this much memory because not every number will be prime
+        allocate(primeList(maxNumber))                                  ! Dynamic memory allocation
 
         !$omp parallel do schedule(guided)                              ! Creates multiple threads, compile with -fopenmp
         do i = 1, maxNumber                                             ! Loop from i = 1 to i = maxNumber (inclusive), increment i by 1 (default)
@@ -92,7 +92,7 @@ program prime
     call cpu_time(cpuStart)                                             ! Get the cpu time, this will be the cpu runtime
     numPrimes = primeListTest(maxNumber)                                ! Calculates all prime numbers up to maxNumber
     call cpu_time(cpuFinish)                                            ! Get finish cpu time
-    call system_clock(sysFinish, sysClkRate)                            ! Get finish system time
+    call system_clock(sysFinish, sysClkRate)                            ! Get the finishing system time
 
     apparentTime = ((sysFinish - sysStart) / real(sysClkRate))
     cpuTime = (cpuFinish - cpuStart)

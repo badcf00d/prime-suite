@@ -56,9 +56,9 @@ def primeListTest(maxNumber):
 def main():
     maxNumber = int(input("Generate all primes up to: "))
 
-    sysStart = time.perf_counter()
+    sysStart = time.perf_counter()                                              # Get the system time, this will be the apparent runtime
     numPrimes = primeListTest(maxNumber)
-    sysFinish = time.perf_counter()
+    sysFinish = time.perf_counter()                                             # Get the finishing system time
 
     apparentTime = sysFinish - sysStart
 
