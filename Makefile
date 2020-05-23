@@ -21,16 +21,14 @@ CPRE := $(CSRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.i)
 CCBC := $(CSRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.bc)
 
 JAVSRC := $(wildcard $(SRC_DIR)/*.java)
-JAVCLS := $(JAVSRC:$(SRC_DIR)/%.java=$(OBJ_DIR)/%.class)
+JAVOUT := $(JAVSRC:$(SRC_DIR)/%.java=$(OBJ_DIR)/%.class)
 
 ifeq ($(OS),Windows_NT)
 	F90OUT := fortran-prime.exe
 	COUT := c-prime.exe
-	JAVOUT := prime.class
 else
 	F90OUT := fortran-prime
 	COUT := c-prime
-	JAVOUT := prime.class
 endif
 
 .PHONY: clean all generate-profile use-profile
@@ -56,8 +54,8 @@ $(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(F90OBJ) $(F90OUT) $(F90ASM) $(F90MOD) $(COBJ) $(COUT) $(CASM) $(CPRE) $(CCBC) $(JAVCLS)
-	cd rust-prime && cargo clean
+	rm -f $(F90OBJ) $(F90OUT) $(F90ASM) $(F90MOD) $(COBJ) $(COUT) $(CASM) $(CPRE) $(CCBC) $(JAVOUT)
+	cd rust-prime && cargo clean --release -p rust-prime
 
 
 generate-profile: CFLAGS += $(GEN_PROFILE_CFLAGS)
