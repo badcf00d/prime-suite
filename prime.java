@@ -1,21 +1,28 @@
-import java.util.Scanner;
-import java.lang.Math;
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadMXBean;
+import java.util.Scanner;                                                   // Scanner is used to get user input from stdin
+import java.lang.Math;                                                      // Gives us math functions like floor and sqrt
+import java.lang.management.ManagementFactory;                              // Used for cpu time measurements
+import java.lang.management.ThreadMXBean;                                   // Used for cpu time measurements
 
-public class prime 
+
+
+public class prime                                                          // All code must be inside a class in Java     
 {
-    private int[] primeList;
+    private int[] primeList;                                                // An empty array that is only visible to functions within this class
 
+
+    // Factor test by trial division using the 6k +- 1 optimisation, this
+    // means that factors of factors will not be displayed, i.e. if the test
+    // number is a factor of 2, it will not show 4, 6, 8 etc.
+    //
     public boolean findFactors(int testNum, boolean verbose)
     {
-        final int testLimit = (int) Math.floor(Math.sqrt(testNum));          // Local constant variable
+        final int testLimit = (int) Math.floor(Math.sqrt(testNum));         // Local constant variable
         boolean isPrime = true;
 
         if (testNum <= 3)
         {
             isPrime = (testNum > 1);
-            if (verbose) System.out.printf("Special case %d", testNum);                // %d means print an integer
+            if (verbose) System.out.printf("Special case %d", testNum);     // %d means print an integer
         }
         else 
         {
@@ -47,13 +54,15 @@ public class prime
         return isPrime;
     }
     
+
+
     // Helper function for calculating all prime numbers up to maxNumber
     //
     public int primeListTest(int maxNumber)
     {
         int numPrimes = 0;
+        primeList = new int[maxNumber];                                     // Dynamic memory allocation, automatically initialized to 0
 
-        primeList = new int[maxNumber];                         // Dynamic memory allocation & initialize to 0
 
         for (int i = 1; i <= maxNumber; i++)                                // Loop from i = 1 to maxNumber (inclusive), increment by 1 
         {                                                                   
@@ -75,6 +84,9 @@ public class prime
         return numPrimes;
     }
 
+
+    // main is the default name for the starting point of a program in C
+    //
     public static void main(String args[]) 
     { 
         // Using Scanner for Getting Input from User 
