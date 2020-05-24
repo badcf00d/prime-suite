@@ -11,6 +11,7 @@ This shows an implementation of a multi-threaded prime number calculator written
 ├── Makefile                      # Makefile for GNU Make
 ├── prime.c                       # C source file
 ├── prime.f90                     # Fortran source file
+├── prime.go                      # Go source file
 ├── prime.java                    # Java source file
 ├── prime.js                      # JavaScript (single-threaded) source file
 ├── prime.py                      # Python 3 source file
