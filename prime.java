@@ -1,4 +1,5 @@
 import java.util.Scanner;                                                   // Scanner is used to get user input from stdin
+import java.util.stream.IntStream;                                          // IntStream allows for easy for-loop multithreading
 import java.lang.Math;                                                      // Gives us math functions like floor and sqrt
 import java.lang.management.ManagementFactory;                              // Used for cpu time measurements
 import java.lang.management.ThreadMXBean;                                   // Used for cpu time measurements
@@ -63,14 +64,14 @@ public class prime                                                          // A
         int numPrimes = 0;
         primeList = new int[maxNumber];                                     // Dynamic memory allocation, automatically initialized to 0
 
-
-        for (int i = 1; i <= maxNumber; i++)                                // Loop from i = 1 to maxNumber (inclusive), increment by 1 
-        {                                                                   
-            if (findFactors(i, false) == true)                              // Is this number (i) prime?
+        IntStream.range(1, (maxNumber + 1)).parallel().forEach(i ->         // Loop from i = 1 to maxNumber (inclusive), increment by 1 
             {
-                primeList[i - 1] = i;                                       // Arrays start at 0 in C
+                if (findFactors(i, false) == true)                          // Is this number (i) prime?
+                {
+                    primeList[i - 1] = i;                                   // Arrays start at 0 in Java
+                }
             }
-        }
+        );
 
         for (int i = 0; i < maxNumber; i++)                                 // This loop essentially removes the blanks and bunches all the primes up next to eachother in primeList
         {
