@@ -64,7 +64,7 @@ public class prime                                                          // A
         int numPrimes = 0;
         primeList = new int[maxNumber];                                     // Dynamic memory allocation, automatically initialized to 0
 
-        IntStream.range(1, (maxNumber + 1)).parallel().forEach(i ->         // Loop from i = 1 to maxNumber (inclusive), increment by 1 
+        IntStream.range(1, (maxNumber + 1)).parallel().forEach(i ->         // Multi-threaded loop from i = 1 to maxNumber (inclusive), increment by 1 
             {
                 if (findFactors(i, false) == true)                          // Is this number (i) prime?
                 {
@@ -86,7 +86,7 @@ public class prime                                                          // A
     }
 
 
-    // main is the default name for the starting point of a program in C
+    // main is the default name for the starting point of a program in Java
     //
     public static void main(String args[]) 
     { 
