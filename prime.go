@@ -1,9 +1,9 @@
 package main // The file containing the main() function must also be the main package
 
+// In Go you can embed C code in comments with import "C" below it, pretty cool huh?
+
 /*
-#include <pthread.h>
 #include <time.h>
-#include <stdio.h>
 
 static long long cpuClock() {
     struct timespec t;
@@ -12,6 +12,7 @@ static long long cpuClock() {
 }
 */
 import "C"
+
 import (
 	"fmt"
 	"math"
@@ -67,7 +68,6 @@ func findFactors(testNum int, verbose bool) bool {
 //
 func primeListTest(maxNumber int) int {
 	var numPrimes int = 0
-
 	primeList = make([]int, maxNumber) // Dynamic memory allocation & automatically initializes to 0
 
 	for i := 1; i <= maxNumber; i++ { // Loop from i = 1 to maxNumber (inclusive), increment by 1
