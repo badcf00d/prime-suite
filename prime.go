@@ -16,6 +16,7 @@ import "C"
 import (
 	"fmt"
 	"math"
+	"sync"
 	"time"
 )
 
@@ -70,11 +71,19 @@ func primeListTest(maxNumber int) int {
 	var numPrimes int = 0
 	primeList = make([]int, maxNumber) // Dynamic memory allocation & automatically initializes to 0
 
+	var work sync.WaitGroup // A waitgroup is the main way we can make a parallel section of code
+	work.Add(maxNumber)     // Tell the waitgroup how many iterations we're about to do
+
 	for i := 1; i <= maxNumber; i++ { // Loop from i = 1 to maxNumber (inclusive), increment by 1
-		if findFactors(i, false) == true { // Is this number (i) prime?
-			primeList[i-1] = i // Arrays start at 0 in C
-		}
+		go func(i int) { // Uses a goroutine to spawn a thread to run this chunk of code with it's own copy of the i variable
+			defer work.Done()                  // defer means run only when this function finishes, work.Done() tells the WaitGroup it's done
+			if findFactors(i, false) == true { // Is this number (i) prime?
+				primeList[i-1] = i // Arrays start at 0 in Go
+			}
+		}(i)
 	}
+
+	work.Wait() // Waits here until Done() has been called maxNumber of times
 
 	for i := 0; i < maxNumber; i++ { // This loop essentially removes the blanks and bunches all the primes up next to eachother in primeList
 		if primeList[i] != 0 {
