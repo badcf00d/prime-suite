@@ -9,6 +9,7 @@ This shows an implementation of a multi-threaded prime number calculator written
 ```
 ├── LICENSE                       # BSC 2-Clause license
 ├── Makefile                      # Makefile for GNU Make
+├── prime.adb                     # Ada source file
 ├── prime.c                       # C source file
 ├── prime.f90                     # Fortran source file
 ├── prime.go                      # Go source file
