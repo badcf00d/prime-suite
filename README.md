@@ -2,7 +2,7 @@
 This shows an implementation of a multi-threaded prime number calculator written in many different languages to demonstrate how the same program compares when written different languages, as well as showing roughly how performant each language can be.
 
 #### How to use
- - `make` runs the default `all` recipe which compiles all of the source files, you'll also need `gfortran`, `gcc`, `javac`, `go` and `rustup` installed.
+ - `make` runs the default `all` recipe which compiles all of the source files, you'll also need `gfortran`, `gcc`, `javac`, `go`, `gnat` and `rustup` installed.
  - `make clean` deletes all of the files created by the build process.
  
 #### Contents

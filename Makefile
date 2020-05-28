@@ -2,13 +2,18 @@ FC := gfortran
 CC := gcc
 JC := javac
 GC := go
+AC := gnatmake
 CFLAGS := -Wall -O2 -fopenmp -march=native -fverbose-asm
-LDFLAGS := -fopenmp -lm 
+LDFLAGS := -fopenmp -lm
+ADAFLAGS := -Wall -O2 -march=native
 GEN_PROFILE_CFLAGS = -fprofile-generate -fprofile-update=single -pg
 USE_PROFILE_CFLAGS = -fprofile-use -Wno-error=coverage-mismatch
 
 SRC_DIR := .
 OBJ_DIR := .
+RUST_DIR := ./rust-prime
+RUST_SRC_DIR := $(RUST_DIR)/src/bin
+RUST_OUT_DIR := $(RUST_DIR)/target/release
 
 F90SRC := $(wildcard $(SRC_DIR)/*.f90)
 F90OBJ := $(F90SRC:$(SRC_DIR)/%.f90=$(OBJ_DIR)/%.fortran.o)
@@ -21,25 +26,42 @@ CASM := $(CSRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.s)
 CPRE := $(CSRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.i)
 CCBC := $(CSRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.bc)
 
+RUSTSRC := $(wildcard $(RUST_DIR)/*.rs)
+
 JAVSRC := $(wildcard $(SRC_DIR)/*.java)
 JAVOUT := $(JAVSRC:$(SRC_DIR)/%.java=$(OBJ_DIR)/%.class)
 
 GOSRC := $(wildcard $(SRC_DIR)/*.go)
 
+ADASRC := $(wildcard $(SRC_DIR)/*.adb)
+ADAOBJ := $(ADASRC:$(SRC_DIR)/%.adb=$(SRC_DIR)/%.o)
+ADAALI := $(ADASRC:$(SRC_DIR)/%.adb=$(SRC_DIR)/%.ali)
+
 ifeq ($(OS),Windows_NT)
 	F90OUT := fortran-prime.exe
 	COUT := c-prime.exe
+	RUSTOUT := $(RUST_OUT_DIR)/prime.exe
 	GOOUT := go-prime.exe
+	ADAOUT := ada-prime.exe
 else
 	F90OUT := fortran-prime
 	COUT := c-prime
+	RUSTOUT := $(RUST_OUT_DIR)/prime
 	GOOUT := go-prime
+	ADAOUT := ada-prime
 endif
 
-.PHONY: clean all generate-profile use-profile
+.PHONY: clean all generate-profile use-profile fortran c java go ada rust
 
-all: $(F90OUT) $(COUT) $(JAVOUT) $(GOOUT)
-	cd rust-prime && cargo build --release
+all: $(F90OUT) $(COUT) $(JAVOUT) $(GOOUT) $(ADAOUT) $(RUSTOUT)
+
+fortran: $(F90OUT)
+c: $(COUT)
+java: $(JAVOUT)
+go: $(GOOUT)
+ada: $(ADAOUT)
+rust: $(RUSTOUT)
+
 
 $(F90OUT): $(F90OBJ)
 	$(FC) $^ $(LDFLAGS) -o $@
@@ -47,12 +69,17 @@ $(F90OUT): $(F90OBJ)
 $(COUT): $(COBJ)
 	$(CC) $^ $(LDFLAGS) -o $@
 
+$(RUSTOUT): $(RUSTSRC)
+	cd $(RUST_DIR) && cargo build --release
+
 $(JAVOUT): $(JAVSRC)
 	$(JC) $^
 
 $(GOOUT): $(GOSRC)
 	$(GC) build -o $@ $^
 
+$(ADAOUT): $(ADASRC)
+	$(AC) $(ADAFLAGS) $^ -o $@
 
 
 $(OBJ_DIR)/%.fortran.o: $(SRC_DIR)/%.f90
@@ -62,8 +89,7 @@ $(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(F90OBJ) $(F90OUT) $(F90ASM) $(F90MOD) $(COBJ) $(COUT) $(CASM) $(CPRE) $(CCBC) $(JAVOUT) $(GOOUT)
-	cd rust-prime && cargo clean --release -p rust-prime
+	rm -f $(F90OBJ) $(F90OUT) $(F90ASM) $(F90MOD) $(COBJ) $(COUT) $(CASM) $(CPRE) $(CCBC) $(RUSTOUT) $(JAVOUT) $(GOOUT) $(ADAOBJ) $(ADAALI) $(ADAOUT)
 
 
 generate-profile: CFLAGS += $(GEN_PROFILE_CFLAGS)
