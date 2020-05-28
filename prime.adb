@@ -1,12 +1,21 @@
 with Ada.Numerics.Elementary_Functions;                                         -- With is simular to import or #include in other languages
-use Ada.Numerics.Elementary_Functions;                                          -- Use treates the library as if it's local so you just say func() rather than library.func()
 with Ada.Text_IO; 
+with Ada.Calendar; 
+with Ada.Real_Time;
+with Ada.Execution_Time;
+use Ada.Numerics.Elementary_Functions;                                          -- Use treates the library as if it's local so you just say func() rather than library.func()
 use Ada.Text_IO;
 
 
 procedure Prime is
     maxNumber : Integer;                                                        -- Variables just visible to this procedure
     numPrimes : Integer;
+    sysStart : Ada.Calendar.Time;                                               -- Using types declared in external libraries
+    sysFinish : Ada.Calendar.Time;
+    cpuStart : Ada.Execution_Time.CPU_Time;
+    cpuFinish : Ada.Execution_Time.CPU_Time;
+    apparentTime : Duration;
+    cpuTime : Duration;
     type primeListType is array(Integer range <>) of Integer;                   -- Declare a new integer array data type that can be indexed by integers
     
 
@@ -86,8 +95,18 @@ begin
     declare                                                                     -- Ada does not allow declaring variables in the body of a funciton, unless you do this
         primeList : primeListType(0..maxNumber) := (others => 0);               -- Dynamic memory allocation & initialize to 0
     begin
-        numPrimes := primeListTest(maxNumber, primeList);     
-        Put("Generated" & Integer'Image(numPrimes) & " primes, Largest was:" & Integer'Image(primeList(numPrimes - 1)));
+        sysStart := Ada.Calendar.Clock;
+        cpuStart := Ada.Execution_Time.Clock;
+        numPrimes := primeListTest(maxNumber, primeList);
+        cpuFinish := Ada.Execution_Time.Clock;
+        sysFinish := Ada.Calendar.Clock;
+
+        apparentTime := Ada.Calendar."-" (sysFinish, sysStart);                -- An example of using an operator declared in another library
+        cpuTime := Ada.Real_Time.To_Duration((Ada.Execution_Time."-" (cpuFinish, cpuStart)));
+
+        Put_Line("Generated" & Integer'Image(numPrimes) & " primes, Largest was:" & Integer'Image(primeList(numPrimes - 1)));
+        Put_Line("Apparent Time =" & Duration'Image(apparentTime) & " seconds");
+        Put_Line("CPU Time =" & Duration'Image(cpuTime) & " seconds");
     end;
 
 end Prime;
