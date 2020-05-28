@@ -1,8 +1,8 @@
 package main // The file containing the main() function must also be the main package
 
-// In Go you can embed C code in comments with import "C" below it, pretty cool huh?
-
 /*
+// A section of C code to do CPU-time measurements because there aren't any Go functions for it
+
 #include <time.h>
 
 static long long cpuClock() {
@@ -11,13 +11,15 @@ static long long cpuClock() {
     return (t.tv_sec * 1e9) + t.tv_nsec;
 }
 */
-import "C"
+import (
+	"C" // In Go you can embed C code in comments with import "C" below it, pretty cool huh?
+)
 
 import (
-	"fmt"
-	"math"
-	"sync"
-	"time"
+	"fmt"  // Gives us IO functions like printf and scanf
+	"math" // Gives us math functions like sqrt and floor
+	"sync" // Gives us useful multi-threading syncronisation functions
+	"time" // Gives us timing related functions
 )
 
 var primeList []int // Pointer variable accessible to anything in this file
