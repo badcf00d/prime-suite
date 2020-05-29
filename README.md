@@ -14,7 +14,7 @@ This shows an implementation of a multi-threaded prime number calculator written
 ├── prime.f90                     # Fortran source file
 ├── prime.go                      # Go source file
 ├── prime.java                    # Java source file
-├── prime.js                      # JavaScript (single-threaded) source file
+├── prime.js                      # JavaScript source file
 ├── prime.py                      # Python 3 source file
 ├── README.md                     # Readme Markdown file
 └── rust-prime
@@ -23,3 +23,13 @@ This shows an implementation of a multi-threaded prime number calculator written
         └── bin
             └── prime.rs          # Rust source file
 ```
+
+#### Multi-threading Support
+ - ~~**Ada**~~ - Does support creating task functions that may be run as a thread, but does not have support for doing highly parallel iteration in a concise way.
+ - ~~**JavaScript**~~ - Can spawn child processes through the `worker_threads` API, but does not have any sort of multi-threading support within a program.
+ - **C** - Supports OpenMP through `#pragma omp`.
+ - **Fortran** - Supports OpenMP through `!$omp`.
+ - **Go** - Goroutines combined with WaitGroups are a reasonably consise way of making a parallel section of code.
+ - **Java** - The IntStream class provides the `parallel().forEach()` method which is a multi-threaded iterator.
+ - **Python** - Supports multi-threading with `ThreadPoolExecutor` from concurrent.futures, and multi-processing from `multiprocessing`. The multi-processing approach was significantly faster in this example so that is what's used here.
+ - **Rust** - The Rayon library adds supports for the `par_iter_mut().enumerate().for_each()` method which provides a multi-threaded iterator.
