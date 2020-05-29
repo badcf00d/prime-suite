@@ -1,5 +1,5 @@
 # prime-suite
-This shows an implementation of a multi-threaded prime number calculator written in many different languages to demonstrate how the same program compares when written different languages, as well as showing roughly how performant each language can be.
+This shows an implementation of a prime number calculator written in many different languages to demonstrate how the same program compares when written different languages, as well as showing roughly how performant each language can be.
 
 #### How to use
  - `make` runs the default `all` recipe which compiles all of the source files, you'll also need `gfortran`, `gcc`, `javac`, `go`, `gnat` and `rustup` installed.
@@ -23,13 +23,22 @@ This shows an implementation of a multi-threaded prime number calculator written
         └── bin
             └── prime.rs          # Rust source file
 ```
+---
 
-#### Multi-threading Support
- - ~~**Ada**~~ - Does support creating task functions that may be run as a thread, but does not have support for doing highly parallel iteration in a concise way.
- - ~~**JavaScript**~~ - Can spawn child processes through the `worker_threads` API, but does not have any sort of multi-threading support within a program.
- - **C** - Supports OpenMP through `#pragma omp`.
- - **Fortran** - Supports OpenMP through `!$omp`.
- - **Go** - Goroutines combined with WaitGroups are a reasonably consise way of making a parallel section of code.
- - **Java** - The IntStream class provides the `parallel().forEach()` method which is a multi-threaded iterator.
- - **Python** - Supports multi-threading with `ThreadPoolExecutor` from concurrent.futures, and multi-processing from `multiprocessing`. The multi-processing approach was significantly faster in this example so that is what's used here.
- - **Rust** - The Rayon library adds supports for the `par_iter_mut().enumerate().for_each()` method which provides a multi-threaded iterator.
+#### Multi-threading
+
+ 🗙 **Ada** - Does support creating task functions that may be run as a thread, but does not have support for doing highly parallel iteration in a concise way.
+
+ 🗙 **JavaScript** - Can spawn child processes through the `worker_threads` API, but does not have any sort of multi-threading support within a program.
+
+ ✓ **C** - Supports OpenMP through `#pragma omp`.
+ 
+ ✓ **Fortran** - Supports OpenMP through `!$omp`.
+ 
+ ✓ **Go** - Goroutines combined with WaitGroups are a reasonably consise way of making a parallel section of code.
+ 
+ ✓ **Java** - The IntStream class provides the `parallel().forEach()` method which is a multi-threaded iterator.
+ 
+ ✓ **Python** - Supports multi-threading with `ThreadPoolExecutor` from concurrent.futures, and multi-processing from `multiprocessing`. The multi-processing approach was significantly faster in this example so that is what's used here.
+ 
+ ✓ **Rust** - The Rayon library adds supports for the `par_iter_mut().enumerate().for_each()` method which provides a multi-threaded iterator.
