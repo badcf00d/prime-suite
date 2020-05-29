@@ -1,10 +1,12 @@
-with Ada.Numerics.Elementary_Functions;                                         -- With is simular to import or #include in other languages
-with Ada.Text_IO; 
-with Ada.Calendar; 
-with Ada.Real_Time;
-with Ada.Execution_Time;
+with Ada.Numerics.Elementary_Functions;                                         -- Gives us math functions like sqrt and floor
+with Ada.Text_IO;                                                               -- Gives us Put and Get for doing terminal interaction
+with Ada.Calendar;                                                              -- Gives us system timing functionality
+with Ada.Real_Time;                                                             -- Gives us CPU timing functions
+with Ada.Execution_Time;                                                        -- Gives us CPU timing functions
+
 use Ada.Numerics.Elementary_Functions;                                          -- Use treates the library as if it's local so you just say func() rather than library.func()
 use Ada.Text_IO;
+
 
 
 procedure Prime is
@@ -108,5 +110,4 @@ begin
         Put_Line("Apparent Time =" & Duration'Image(apparentTime) & " seconds");
         Put_Line("CPU Time =" & Duration'Image(cpuTime) & " seconds");
     end;
-
 end Prime;
