@@ -4,3 +4,5 @@
 *.i
 *.mod
 *.class
+*.ali
+*.hi
