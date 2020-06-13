@@ -8,7 +8,7 @@ This shows an implementation of a prime number calculator written in many differ
  
 #### Contents
 ```
-├── LICENSE                       # BSC 2-Clause license
+├── LICENSE                       # BSD 2-Clause license
 ├── Makefile                      # Makefile for GNU Make
 ├── prime.adb                     # Ada source file
 ├── prime.c                       # C source file
