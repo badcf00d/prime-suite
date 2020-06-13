@@ -1,15 +1,16 @@
 #![allow(non_snake_case)]                                               // Disables the warning about non snake case (e.g. hello_world) variables
-use std::io::{stdin,stdout,Write};                                      // Gives us printing and reading functions
-use std::time::{Instant};                                               // Gives us system timing functions
-use cpu_time::ProcessTime;                                              // Gives us CPU timing functions
 use rayon::prelude::*;                                                  // Gives us the rayon multithreading functions (e.g. par_iter_mut)
+use std::env;                                                           // Gives us command line argument functions
 
 
-
+// Factor test by trial division using the 6k +- 1 optimisation, this
+// means that factors of factors will not be displayed, i.e. if the test
+// number is a factor of 2, it will not show 4, 6, 8 etc.
+//
 fn findFactors(testNum:i32, verbose:bool) -> bool
 {
-    let testLimit = (testNum as f64).sqrt().floor() as i32;             // Local constant variable
-    let mut isPrime = true;
+    let testLimit = (testNum as f64).sqrt().floor() as i32;             // Local constant
+    let mut isPrime = true;                                             // Local variable
 
     if testNum <= 3
     {
@@ -47,7 +48,8 @@ fn findFactors(testNum:i32, verbose:bool) -> bool
 }
 
 
-
+// Helper function for calculating all prime numbers up to maxNumber
+//
 fn primeListTest(maxNumber:i32) -> (usize, Vec<usize>)
 {
     let mut numPrimes:usize = 0;
@@ -75,29 +77,13 @@ fn primeListTest(maxNumber:i32) -> (usize, Vec<usize>)
 }
 
 
-
+// main is the default name for the starting point of a program in Rust
+//
 fn main() 
 {
-    print!("Generate all primes up to: ");
-    stdout().flush().ok().expect("Could not flush stdout");             // You must manually flush the buffer to stdout when using print!
-
-
-    let mut buffer = String::new();                                     // This section of code reads the number from stdin 
-    match stdin().read_line(&mut buffer) 
-    {
-        Ok(_n) => {}
-        Err(error) => println!("error: {}", error),
-    }
-    let maxNumber:i32 = buffer.trim_end().parse().unwrap();
-
-
-    let sysStart = Instant::now();                                      // Get the system time, this will be the apparent runtime
-    let cpuStart = ProcessTime::now();                                  // Get the cpu time, this will be the cpu runtime
+    let args: Vec<String> = env::args().collect();                      // Gets an array of strings containing all the command line arguments
+    let maxNumber:i32 = args[1].parse().unwrap();                       // argv[0] will be the rs file, the first argument is argv[1], and convert to an integer
     let (numPrimes, primeList) = primeListTest(maxNumber);              // Calculates all prime numbers up to maxNumber
-    let cpuTime = cpuStart.elapsed().as_secs_f64();                     // Get the cpu time elapsed since we started
-    let apparentTime = sysStart.elapsed().as_secs_f64();                // Get the system time elapsed since we started
 
     println!("Generated {} primes, Largest was: {}", numPrimes, primeList[(numPrimes - 1)]);
-    println!("Apparent time = {:.3} seconds", apparentTime);
-    println!("CPU time = {:.6} seconds", cpuTime);
 }
