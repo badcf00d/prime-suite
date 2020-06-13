@@ -4,6 +4,7 @@ This shows an implementation of a prime number calculator written in many differ
 #### How to use
  - `make` runs the default `all` recipe which compiles all of the source files, you'll also need `gfortran`, `gcc`, `javac`, `go`, `gnat` `haskell-platform` and `rustup` installed.
  - `make clean` deletes all of the files created by the build process.
+ - The programs take a numerical argument e.g. `c-prime 100` or `python prime.py 100` which will produce all the primes up to 100 (inclusive).
  
 #### Contents
 ```

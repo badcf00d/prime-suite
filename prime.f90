@@ -82,24 +82,14 @@ end module primeMod
 program prime
     use primeMod                                                        ! Includes the functions and data specified in the primeMod module above
     implicit none
-    integer :: maxNumber, numPrimes, sysStart, sysFinish, sysClkRate
-    real    :: cpuStart, cpuFinish, apparentTime, cpuTime
+    integer             :: maxNumber, numPrimes
+    character(len=32)   :: argBuffer
 
-    write(*,'(a)', advance="no") ' Generate all primes up to: '         ! '(a)' means string format, no advance means no newline at the end
-    read(*,*) maxNumber                                                 ! The first * means read from stdin, the next * means auto-format
+    call get_command_argument(1, argBuffer)                             ! Gets the first command line argument, stores it as a string in argBuffer
+    read(argBuffer, '(I32)') maxNumber
 
-    call system_clock(sysStart, sysClkRate)                             ! Get the system time, this will be the apparent runtime
-    call cpu_time(cpuStart)                                             ! Get the cpu time, this will be the cpu runtime
     numPrimes = primeListTest(maxNumber)                                ! Calculates all prime numbers up to maxNumber
-    call cpu_time(cpuFinish)                                            ! Get finish cpu time
-    call system_clock(sysFinish, sysClkRate)                            ! Get the finishing system time
-
-    apparentTime = ((sysFinish - sysStart) / real(sysClkRate))
-    cpuTime = (cpuFinish - cpuStart)
 
     write(*,*) 'Generated ', numPrimes, ' primes, Largest was: ', primeList(numPrimes)
-    write(*,'(a f7.3 a)') ' Apparent time = ', apparentTime, ' seconds'
-    write(*,'(a f12.6 a)') ' CPU time = ', cpuTime, ' seconds'
-
     deallocate(primeList)
 end program prime

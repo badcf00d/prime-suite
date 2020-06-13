@@ -1,25 +1,11 @@
 package main // The file containing the main() function must also be the main package
 
-/*
-// A section of C code to do CPU-time measurements because there aren't any Go functions for it
-
-#include <time.h>
-
-static long long cpuClock() {
-    struct timespec t;
-    clock_gettime(CLOCK_THREAD_CPUTIME_ID, &t);
-    return (t.tv_sec * 1e9) + t.tv_nsec;
-}
-*/
 import (
-	"C" // In Go you can embed C code in comments with import "C" below it, pretty cool huh?
-)
-
-import (
-	"fmt"  // Gives us IO functions like printf and scanf
-	"math" // Gives us math functions like sqrt and floor
-	"sync" // Gives us useful multi-threading syncronisation functions
-	"time" // Gives us timing related functions
+	"fmt"     // Gives us IO functions like printf and scanf
+	"math"    // Gives us math functions like sqrt and floor
+	"os"      // Gives us command line argument functions
+	"strconv" // Gives us string to int conversions
+	"sync"    // Gives us useful multi-threading syncronisation functions
 )
 
 var primeList []int // Pointer variable accessible to anything in this file
@@ -100,20 +86,10 @@ func primeListTest(maxNumber int) int {
 // main is the default name for the starting point of a program in Go
 //
 func main() {
-	var maxNumber int
+	maxNumber, convError := strconv.Atoi(os.Args[1]) // Atoi = Ascii TO Integer, Args[0] will be the name of the executable, the first argument is Args[1]
 
-	fmt.Printf("Generate all primes up to: ")
-	fmt.Scanf("%d", &maxNumber) // Read from stdin as a number (%d)
-
-	sysStart := time.Now()                // Get the system time, this will be the apparent runtime
-	cpuStart := C.cpuClock()              // Get the cpu time, this will be the cpu runtime
-	numPrimes := primeListTest(maxNumber) // Calculates all prime numbers up to maxNumber
-	cpuFinish := C.cpuClock()             // Get finish cpu time
-	apparentTime := time.Since(sysStart)  // Get the finishing system time
-
-	cpuTime := float64(cpuFinish-cpuStart) / 1e9 // Convert nanoseconds to seconds
-
-	fmt.Printf("Generated %d primes, Largest was: %d \n", numPrimes, primeList[numPrimes-1])
-	fmt.Printf("Apparent time = %7.3f seconds\n", apparentTime.Seconds())
-	fmt.Printf("CPU time = %12.6f seconds\n", cpuTime)
+	if convError == nil {
+		numPrimes := primeListTest(maxNumber) // Calculates all prime numbers up to maxNumber
+		fmt.Printf("Generated %d primes, Largest was: %d \n", numPrimes, primeList[numPrimes-1])
+	}
 }

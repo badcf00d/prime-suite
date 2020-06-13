@@ -1,14 +1,4 @@
-const { performance } = require('perf_hooks');                          // Gives us the Performance class for timing runtime
-const readline = require('readline');                                   // Gives us the readline class
-
-const stdio = readline.createInterface(                                 // Creates a readline instance that lets us access stdin and stdout
-{
-    input: process.stdin,
-    output: process.stdout
-});
 var primeList = [0];                                                    // Global variable, array [] of numbers
-
-
 
 
 function findFactors(testNum, verbose)
@@ -83,15 +73,8 @@ function primeListTest(maxNumber)
 }
 
 
-stdio.question("Generate all primes up to: ", (maxNumber) =>            // Read from stdin
-{
-    var sysStart = performance.now();                                   // Get the system time, this will be the apparent runtime
-    var numPrimes = primeListTest(maxNumber);                           // Calculates all prime numbers up to maxNumber
-    var sysFinish = performance.now();                                  // Get the finishing system time
+let maxNumber = parseInt(process.argv[2]);                          // argv[0] will be 'node', argv[1] will be the js file, the first argument is argv[2]
+var numPrimes = primeListTest(maxNumber);                           // Calculates all prime numbers up to maxNumber
 
-    var apparentTime = (sysFinish - sysStart) / 1000;                   // Convert milliseconds to seconds
-
-    console.log(`Generated ${numPrimes} primes, Largest was: ${primeList[numPrimes - 1]}`);
-    console.log(`Apparent time = ${apparentTime.toFixed(3)} seconds`);
-    return process.exit(0);                                             // node.js programs don't exit by themselves, need to manually exit
-});
+console.log(`Generated ${numPrimes} primes, Largest was: ${primeList[numPrimes - 1]}`);
+return process.exit(0);                                             // node.js programs don't exit by themselves, need to manually exit

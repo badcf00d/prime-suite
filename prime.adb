@@ -1,8 +1,7 @@
 with Ada.Numerics.Elementary_Functions;                                         -- Gives us math functions like sqrt and floor
 with Ada.Text_IO;                                                               -- Gives us Put and Get for doing terminal interaction
-with Ada.Calendar;                                                              -- Gives us system timing functionality
-with Ada.Real_Time;                                                             -- Gives us CPU timing functions
-with Ada.Execution_Time;                                                        -- Gives us CPU timing functions
+with Ada.Command_Line;                                                          -- Gives us command line argument functions
+with Ada.Integer_Text_IO;                                                       -- Gives us string to integer conversion
 
 use Ada.Numerics.Elementary_Functions;                                          -- Use treates the library as if it's local so you just say func() rather than library.func()
 use Ada.Text_IO;
@@ -12,12 +11,7 @@ use Ada.Text_IO;
 procedure Prime is
     maxNumber : Integer;                                                        -- Variables just visible to this procedure
     numPrimes : Integer;
-    sysStart : Ada.Calendar.Time;                                               -- Using types declared in external libraries
-    sysFinish : Ada.Calendar.Time;
-    cpuStart : Ada.Execution_Time.CPU_Time;
-    cpuFinish : Ada.Execution_Time.CPU_Time;
-    apparentTime : Duration;
-    cpuTime : Duration;
+    numArgs   : Positive;                                                       -- Positive is essentially a non-zero unsigned integer
     type primeListType is array(Integer range <>) of Integer;                   -- Declare a new integer array data type that can be indexed by integers
     
 
@@ -91,23 +85,14 @@ procedure Prime is
 -- A naked begin is the equivalent of main() in other languages
 --
 begin
-    Put("Generate all primes up to: ");
-    maxNumber := Integer'Value(Get_Line);
-
+    Ada.Integer_Text_IO.Get(From => Ada.Command_Line.Argument(1),               -- Take the string from the first command line argument, and convert to integer
+                            Item => maxNumber,                                  -- Store the converted integer in maxNumber
+                            Last => numArgs);                                   -- Store the index of the last argument in numArgs
+    
     declare                                                                     -- Ada does not allow declaring variables in the body of a funciton, unless you do this
         primeList : primeListType(0..maxNumber) := (others => 0);               -- Dynamic memory allocation & initialize to 0
     begin
-        sysStart := Ada.Calendar.Clock;
-        cpuStart := Ada.Execution_Time.Clock;
         numPrimes := primeListTest(maxNumber, primeList);
-        cpuFinish := Ada.Execution_Time.Clock;
-        sysFinish := Ada.Calendar.Clock;
-
-        apparentTime := Ada.Calendar."-" (sysFinish, sysStart);                -- An example of using an operator declared in another library
-        cpuTime := Ada.Real_Time.To_Duration((Ada.Execution_Time."-" (cpuFinish, cpuStart)));
-
         Put_Line("Generated" & Integer'Image(numPrimes) & " primes, Largest was:" & Integer'Image(primeList(numPrimes - 1)));
-        Put_Line("Apparent Time =" & Duration'Image(apparentTime) & " seconds");
-        Put_Line("CPU Time =" & Duration'Image(cpuTime) & " seconds");
     end;
 end Prime;

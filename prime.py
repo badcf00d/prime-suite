@@ -1,5 +1,6 @@
 import time, math                                                               # Gives us system timing functions and math functions like sqrt and floor
 import multiprocessing, itertools                                               # Gives us multithreading related functions 
+import sys                                                                      # Gives us command line argument functions
 
 primeList = [0]                                                                 # Global variable that is a list [] of integers
 
@@ -54,19 +55,10 @@ def primeListTest(maxNumber):
 
 
 def main():
-    maxNumber = int(input("Generate all primes up to: "))
-
-    sysStart = time.perf_counter()                                              # Get the system time, this will be the apparent runtime
+    maxNumber = int(sys.argv[1])                                                # argv[0] will be the py file, the first argument is argv[1]
     numPrimes = primeListTest(maxNumber)
-    sysFinish = time.perf_counter()                                             # Get the finishing system time
-
-    apparentTime = sysFinish - sysStart
-
     print("Generated %d primes, Largest was: %d " % (numPrimes, primeList[numPrimes - 1]))
-    print("Apparent time = %7.3f seconds" % (apparentTime))
-    # In all the other examples I measure CPU time directly but it's 
-    # really complicated to do that with the multiprocessing module
-    # so I've left it out of the Python example
+
 
 
 if __name__ == "__main__":

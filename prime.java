@@ -1,8 +1,5 @@
-import java.util.Scanner;                                                   // Scanner is used to get user input from stdin
 import java.util.stream.IntStream;                                          // IntStream allows for easy for-loop multithreading
 import java.lang.Math;                                                      // Gives us math functions like floor and sqrt
-import java.lang.management.ManagementFactory;                              // Used for cpu time measurements
-import java.lang.management.ThreadMXBean;                                   // Used for cpu time measurements
 
 
 
@@ -91,29 +88,12 @@ public class prime                                                          // A
     public static void main(String args[]) 
     { 
         // Using Scanner for Getting Input from User 
-        Scanner stdin = new Scanner(System.in);
         prime prime = new prime();
-        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-        long sysStart, sysFinish;
         int numPrimes, maxNumber;
-        double apparentTime, cpuTime = 0;
 
-        System.out.print("Generate all primes up to: "); 
-        maxNumber = stdin.nextInt(); 
-        stdin.close();
-
-        sysStart = System.nanoTime();
+        maxNumber = Integer.parseInt(args[0]);
         numPrimes = prime.primeListTest(maxNumber);
-        sysFinish = System.nanoTime();
 
-        apparentTime = (sysFinish - sysStart) / 1e9;
-        for (long id : threadMXBean.getAllThreadIds()) {
-            cpuTime += threadMXBean.getThreadCpuTime(id);
-        }
-        cpuTime /= 1e9;
-
-        System.out.printf("Apparent time = %7.3f seconds\n", apparentTime);
-        System.out.printf("CPU time = %12.6f seconds\n", cpuTime);
         System.out.printf("Generated %d primes, Largest was: %d \n", numPrimes, prime.primeList[numPrimes - 1]);
     }    
 }

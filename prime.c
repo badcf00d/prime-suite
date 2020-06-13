@@ -2,10 +2,9 @@
 #include <stdbool.h>                                                    // Gives us the bool type
 #include <stdlib.h>                                                     // Gives us dynamic memory functions
 #include <math.h>                                                       // Gives us math functions like sqrt
-#include <sys/time.h>                                                   // Gives us gettimeofday
-#include <time.h>                                                       // Gives us CPU clock functions
 
-int* primeList;                                                         // Pointer variable accessible to anything in this file
+
+static int* primeList;                                                  // Pointer variable accessible to anything in this file
 
 
 
@@ -89,29 +88,12 @@ static int primeListTest(const int maxNumber)
 
 // main is the default name for the starting point of a program in C
 //
-int main() 
+int main(int argc, char *argv[]) 
 {
-    int maxNumber, numPrimes;
-    float apparentTime, cpuTime;
-    struct timeval sysStart, sysFinish, sysTimeDiff;
-    clock_t cpuStart, cpuFinish;
-
-    printf("Generate all primes up to: ");
-    scanf("%d", &maxNumber);                                            // Read from stdin as a number (%d)
-    
-    gettimeofday(&sysStart, NULL);                                      // Get the system time, this will be the apparent runtime
-    cpuStart = clock();                                                 // Get the cpu time, this will be the cpu runtime
+    int maxNumber, numPrimes;                                           // local variables only visible to this function
+    maxNumber = atoi(argv[1]);                                          // atoi = Ascii TO Integer, argv[0] will be the name of the executable, the first argument is argv[1]
     numPrimes = primeListTest(maxNumber);                               // Calculates all prime numbers up to maxNumber
-    cpuFinish = clock();                                                // Get finish cpu time
-    gettimeofday(&sysFinish, NULL);                                     // Get the finishing system time
-
-    timersub(&sysFinish, &sysStart, &sysTimeDiff);                      // Calculates the difference between sysStart and sysFinish
-    apparentTime = sysTimeDiff.tv_sec + (sysTimeDiff.tv_usec * 1e-6);   // Add up the total time taken
-    cpuTime = ((float) (cpuFinish - cpuStart)) / CLOCKS_PER_SEC;        // Convert the cpu ticks to seconds
-
+    
     printf("Generated %d primes, Largest was: %d \n", numPrimes, primeList[numPrimes - 1]);
-    printf("Apparent time = %7.3f seconds\n", apparentTime);
-    printf("CPU time = %12.6f seconds\n", cpuTime);
-
     free(primeList);
 }
