@@ -7,7 +7,7 @@ HC := ghc
 CFLAGS := -Wall -O2 -fopenmp -march=native -fverbose-asm
 LDFLAGS := -fopenmp -lm
 ADAFLAGS := -Wall -O2 -march=native
-HSKFLAGS := -Wall -O2 -dynamic -package time 
+HSKFLAGS := -Wall -O2 -dynamic -threaded -package parallel
 GEN_PROFILE_CFLAGS = -fprofile-generate -fprofile-update=single -pg
 USE_PROFILE_CFLAGS = -fprofile-use -Wno-error=coverage-mismatch
 
