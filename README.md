@@ -2,7 +2,9 @@
 This shows an implementation of a prime number calculator written in many different languages to demonstrate how the same program compares when written different languages, as well as showing roughly how performant each language can be.
 
 #### How to use
- - `make` runs the default `all` recipe which compiles all of the source files, you'll also need `gfortran`, `gcc`, `javac`, `go`, `gnat` `haskell-platform` and `rustup` installed.
+ - Install all of the prerequisites: `gfortran gcc default-jdk go gnat haskell-platform nodejs python3` and `rustup`
+ - `make` runs the default `all` recipe which compiles all of the source files.
+   - If you want to just make one of the languages do `make` and then the language e.g. `make fortran`
  - The programs take a numerical argument e.g. `c-prime 100` or `python prime.py 100` which will produce all the primes up to 100 (inclusive). 
    - The only slight exception is Haskell where you need some additional arguments to enable multithreading e.g. `haskell-prime 100 +RTS -N<number of threads>`
  - `make clean` deletes all of the files created by the build process.
@@ -42,6 +44,9 @@ This shows an implementation of a prime number calculator written in many differ
  
  ✓ **Java** - The IntStream class provides the `parallel().forEach()` method which is a multi-threaded iterator.
  
+ ✓ **Haskell** - The `parallel` package provides multi-threaded list strategies.
+ 
  ✓ **Python** - Supports multi-threading with `ThreadPoolExecutor` from concurrent.futures, and multi-processing from `multiprocessing`. The multi-processing approach was significantly faster in this example so that is what's used here.
  
  ✓ **Rust** - The Rayon library adds supports for the `par_iter_mut().enumerate().for_each()` method which provides a multi-threaded iterator.
+ 
