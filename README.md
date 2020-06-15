@@ -5,7 +5,7 @@ This shows an implementation of a prime number calculator written in many differ
  - Install all of the prerequisites: `gfortran gcc default-jdk go gnat haskell-platform nodejs python3` and [rustup](https://rustup.rs/)
  - `make` runs the default `all` recipe which compiles all of the source files.
    - If you want to just make one of the languages do `make` and then the language e.g. `make fortran`
- - The programs take a numerical argument e.g. `c-prime 100` or `python prime.py 100` which will produce all the primes up to 100 (inclusive). 
+ - The programs take a numerical argument e.g. `c-prime 100` or `python3 prime.py 100` which will produce all the primes up to 100 (inclusive). 
    - The only slight exception is Haskell where you need some additional arguments to enable multithreading e.g. `haskell-prime 100 +RTS -N<number of threads>`
  - `make clean` deletes all of the files created by the build process.
  
