@@ -9,6 +9,7 @@ GC := go
 AC := gnatmake
 HC := ghc
 CPPC := g++
+KC := kotlinc
 
 #
 # Flags
@@ -17,6 +18,7 @@ CFLAGS := -Wall -O2 -fopenmp -march=native -fverbose-asm
 LDFLAGS := -fopenmp -lm
 ADAFLAGS := -Wall -O2 -march=native
 HSKFLAGS := -Wall -O2 -dynamic -threaded -package parallel
+KOTFLAGS := -include-runtime -jvm-target 1.8
 GEN_PROFILE_CFLAGS = -fprofile-generate -fprofile-update=single -pg
 USE_PROFILE_CFLAGS = -fprofile-use -Wno-error=coverage-mismatch
 
@@ -66,6 +68,7 @@ CPPASM := $(CPPSRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.s)
 CPPPRE := $(CPPSRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.i)
 CPPCBC := $(CPPSRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.bc)
 
+KOTSRC := $(wildcard $(SRC_DIR)/*.kt)
 
 #
 # Deciding what the executables will be called
@@ -78,6 +81,7 @@ ifeq ($(OS),Windows_NT)
 	ADAOUT := ada-prime.exe
 	HSKOUT := haskell-prime.exe
 	CPPOUT := cpp-prime.exe
+	KOTOUT := kotlin-prime.jar
 else
 	F90OUT := fortran-prime
 	COUT := c-prime
@@ -86,6 +90,7 @@ else
 	ADAOUT := ada-prime
 	HSKOUT := haskell-prime
 	CPPOUT := cpp-prime
+	KOTOUT := kotlin-prime.jar
 endif
 
 
@@ -95,7 +100,7 @@ endif
 #
 .PHONY: clean all generate-profile use-profile fortran c java go ada rust haskell cpp
 
-all: $(F90OUT) $(COUT) $(JAVOUT) $(GOOUT) $(ADAOUT) $(RUSTOUT) $(HSKOUT) $(CPPOUT)
+all: $(F90OUT) $(COUT) $(JAVOUT) $(GOOUT) $(ADAOUT) $(RUSTOUT) $(HSKOUT) $(CPPOUT) $(KOTOUT)
 fortran: $(F90OUT)
 c: $(COUT)
 java: $(JAVOUT)
@@ -104,6 +109,7 @@ ada: $(ADAOUT)
 rust: $(RUSTOUT)
 haskell: $(HSKOUT)
 cpp: $(CPPOUT)
+kotlin: $(KOTOUT)
 
 
 #
@@ -133,6 +139,9 @@ $(HSKOUT): $(HSKOBJ)
 $(CPPOUT): $(CPPOBJ)
 	$(CPPC) $^ $(LDFLAGS) -o $@
 
+$(KOTOUT): $(KOTSRC)
+	$(KC) $^ $(KOTFLAGS) -d $(KOTOUT)
+
 
 $(OBJ_DIR)/%.fortran.o: $(SRC_DIR)/%.f90
 	$(FC) $(CFLAGS) -c $< -o $@
@@ -147,7 +156,7 @@ $(OBJ_DIR)/%.cpp.o: $(SRC_DIR)/%.cpp
 	$(CPPC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(F90OBJ) $(F90OUT) $(F90ASM) $(F90MOD) $(COBJ) $(COUT) $(CASM) $(CPRE) $(CCBC) $(RUSTOUT) $(JAVOUT) $(GOOUT) $(ADAOBJ) $(ADAALI) $(ADAOUT) $(HSKOUT) $(HSKOBJ) $(HSKINT) $(CPPOBJ) $(CPPOUT) $(CPPASM) $(CPPPRE) $(CPPCBC)
+	rm -f $(F90OBJ) $(F90OUT) $(F90ASM) $(F90MOD) $(COBJ) $(COUT) $(CASM) $(CPRE) $(CCBC) $(RUSTOUT) $(JAVOUT) $(GOOUT) $(ADAOBJ) $(ADAALI) $(ADAOUT) $(HSKOUT) $(HSKOBJ) $(HSKINT) $(CPPOBJ) $(CPPOUT) $(CPPASM) $(CPPPRE) $(CPPCBC) $(KOTOUT)
 
 
 #
