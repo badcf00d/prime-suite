@@ -59,7 +59,7 @@ module primeMod                                                         ! Essent
             if (findFactors(i, .false.) .eqv. .true.) then              ! Is this number prime?
                 primeList(i) = i                                        ! Arrays start at 1 in fortran
             else
-                primeList(i) = 0                                        ! Otherwise set it to 0, this helps us in the loop after this one
+                primeList(i) = 0                                        ! Otherwise set it to 0, this helps us in the loop below
             end if
         end do
         !$omp end parallel do
@@ -86,7 +86,7 @@ program prime
     character(len=32)   :: argBuffer
 
     call get_command_argument(1, argBuffer)                             ! Gets the first command line argument, stores it as a string in argBuffer
-    read(argBuffer, '(I32)') maxNumber
+    read(argBuffer, '(I32)') maxNumber                                  ! Reads a 32 character integer, the number may be shorter, but it will be cut off if longer
 
     numPrimes = primeListTest(maxNumber)                                ! Calculates all prime numbers up to maxNumber
 
