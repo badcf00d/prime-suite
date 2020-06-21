@@ -25,7 +25,7 @@ This shows an implementation of a prime number calculator written in many differ
 │   └── src
 │       └── commonMain
 │           └── kotlin
-│               └── prime-native.kt     # Kotlin source file
+│               └── prime.kt            # Kotlin source file
 └── rust-prime
     └── src
         └── bin
