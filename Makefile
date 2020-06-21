@@ -31,7 +31,9 @@ OBJ_DIR := .
 RUST_DIR := ./rust-prime
 RUST_SRC_DIR := $(RUST_DIR)/src/bin
 RUST_OUT_DIR := $(RUST_DIR)/target/release
-
+KOT_DIR := ./kotlin-native-prime
+KOT_SRC_DIR := $(KOT_DIR)/src/commonMain/kotlin
+KOT_OUT_DIR := $(KOT_DIR)/build
 
 #
 # Locating source files
@@ -68,7 +70,7 @@ CPPASM := $(CPPSRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.s)
 CPPPRE := $(CPPSRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.i)
 CPPCBC := $(CPPSRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.bc)
 
-KOTSRC := $(wildcard $(SRC_DIR)/*.kt)
+KOTSRC := $(wildcard $(KOT_SRC_DIR)/*.kt)
 
 #
 # Deciding what the executables will be called
@@ -81,7 +83,7 @@ ifeq ($(OS),Windows_NT)
 	ADAOUT := ada-prime.exe
 	HSKOUT := haskell-prime.exe
 	CPPOUT := cpp-prime.exe
-	KOTOUT := kotlin-prime.jar
+	KOTOUT := $(KOT_OUT_DIR)/bin/windows/releaseExecutable/kotlin-native-prime.exe
 else
 	F90OUT := fortran-prime
 	COUT := c-prime
@@ -90,7 +92,7 @@ else
 	ADAOUT := ada-prime
 	HSKOUT := haskell-prime
 	CPPOUT := cpp-prime
-	KOTOUT := kotlin-prime.jar
+	KOTOUT := $(KOT_OUT_DIR)/bin/linux/releaseExecutable/kotlin-native-prime.kexe
 endif
 
 
@@ -140,8 +142,11 @@ $(CPPOUT): $(CPPOBJ)
 	$(CPPC) $^ $(LDFLAGS) -o $@
 
 $(KOTOUT): $(KOTSRC)
-	$(KC) $^ $(KOTFLAGS) -d $(KOTOUT)
-
+ifeq ($(OS),Windows_NT)
+	cd $(KOT_DIR) && gradle windowsBinaries
+else
+	cd $(KOT_DIR) && gradle linuxBinaries
+endif
 
 $(OBJ_DIR)/%.fortran.o: $(SRC_DIR)/%.f90
 	$(FC) $(CFLAGS) -c $< -o $@
@@ -156,8 +161,8 @@ $(OBJ_DIR)/%.cpp.o: $(SRC_DIR)/%.cpp
 	$(CPPC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(F90OBJ) $(F90OUT) $(F90ASM) $(F90MOD) $(COBJ) $(COUT) $(CASM) $(CPRE) $(CCBC) $(RUSTOUT) $(JAVOUT) $(GOOUT) $(ADAOBJ) $(ADAALI) $(ADAOUT) $(HSKOUT) $(HSKOBJ) $(HSKINT) $(CPPOBJ) $(CPPOUT) $(CPPASM) $(CPPPRE) $(CPPCBC) $(KOTOUT)
-
+	rm -f $(F90OBJ) $(F90OUT) $(F90ASM) $(F90MOD) $(COBJ) $(COUT) $(CASM) $(CPRE) $(CCBC) $(RUSTOUT) $(JAVOUT) $(GOOUT) $(ADAOBJ) $(ADAALI) $(ADAOUT) $(HSKOUT) $(HSKOBJ) $(HSKINT) $(CPPOBJ) $(CPPOUT) $(CPPASM) $(CPPPRE) $(CPPCBC)
+	rm -rf $(KOT_OUT_DIR)
 
 #
 # Stuff for profile guided optimisation
