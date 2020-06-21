@@ -78,7 +78,7 @@ KOTSRC := $(wildcard $(KOT_SRC_DIR)/*.kt)
 ifeq ($(OS),Windows_NT)
 	F90OUT := fortran-prime.exe
 	COUT := c-prime.exe
-	RUSTOUT := $(RUST_OUT_DIR)/rust-prime.exe
+	RUSTOUT := $(RUST_OUT_DIR)/prime.exe
 	GOOUT := go-prime.exe
 	ADAOUT := ada-prime.exe
 	HSKOUT := haskell-prime.exe
@@ -87,7 +87,7 @@ ifeq ($(OS),Windows_NT)
 else
 	F90OUT := fortran-prime
 	COUT := c-prime
-	RUSTOUT := $(RUST_OUT_DIR)/rust-prime
+	RUSTOUT := $(RUST_OUT_DIR)/prime
 	GOOUT := go-prime
 	ADAOUT := ada-prime
 	HSKOUT := haskell-prime
