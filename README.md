@@ -25,7 +25,7 @@ This shows an implementation of a prime number calculator written in many differ
 │   └── src
 │       └── commonMain
 │           └── kotlin
-│               └── prime-native.kt     # Kotlin-native source file
+│               └── prime-native.kt     # Kotlin source file
 └── rust-prime
     └── src
         └── bin
@@ -39,7 +39,7 @@ This shows an implementation of a prime number calculator written in many differ
 
  🗙 **JavaScript** - Can spawn child processes through the `worker_threads` API, but does not have any sort of multi-threading support within a program.
  
- 🗙 **Kotlin Native** - The kotlinx-coroutines-core-native library does not support multi-threading so for the moment this version is broken until support is added
+ 🗙 **Kotlin Native** - The kotlinx-coroutines-core-native library does not support multi-threading so for the moment this version is broken until support is added, see issue https://github.com/Kotlin/kotlinx.coroutines/issues/462.
 
  ✓ **C** - Supports OpenMP through `#pragma omp`.
  
