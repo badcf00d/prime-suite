@@ -2,33 +2,34 @@
 This shows an implementation of a prime number calculator written in many different languages to demonstrate how the same program compares when written different languages, as well as showing roughly how performant each language can be.
 
 #### How to use
- - Install all of the prerequisites: `gfortran gcc g++ default-jdk go gnat haskell-platform nodejs python3`, [kotlin](https://kotlinlang.org/docs/tutorials/command-line.html), and [rustup](https://rustup.rs/)
+ - Install all of the prerequisites: `gfortran gcc g++ default-jdk go gnat haskell-platform nodejs python3`, [kotlin](https://kotlinlang.org/docs/tutorials/command-line.html), [gradle](https://gradle.org/install/) and [rustup](https://rustup.rs/)
  - `make` runs the default `all` recipe which compiles all of the source files.
    - If you want to just make one of the languages do `make` and then the language e.g. `make fortran`
  - The programs take a numerical argument e.g. `c-prime 100` or `python3 prime.py 100` which will produce all the primes up to 100 (inclusive). 
    - The only slight exception is Haskell where you need some additional arguments to enable multithreading e.g. `haskell-prime 100 +RTS -N<number of threads>`
  - `make clean` deletes all of the files created by the build process.
  
-#### Contents
+#### Source Contents
 ```
-├── LICENSE                       # BSD 2-Clause license
-├── Makefile                      # Makefile for GNU Make
-├── prime.adb                     # Ada source file
-├── prime.c                       # C source file
-├── prime.cpp                     # C++ source file
-├── prime.f90                     # Fortran source file
-├── prime.go                      # Go source file
-├── prime.hs                      # Haskell source file
-├── prime.java                    # Java source file
-├── prime.js                      # JavaScript source file
-├── prime.kt                      # Kotlin source file
-├── prime.py                      # Python 3 source file
-├── README.md                     # Readme Markdown file
+├── Makefile                            # Makefile for GNU Make
+├── prime.adb                           # Ada source file
+├── prime.c                             # C source file
+├── prime.cpp                           # C++ source file
+├── prime.f90                           # Fortran source file
+├── prime.go                            # Go source file
+├── prime.hs                            # Haskell source file
+├── prime.java                          # Java source file
+├── prime.js                            # JavaScript source file
+├── prime.py                            # Python 3 source file
+├── kotlin-native-prime
+│   └── src
+│       └── commonMain
+│           └── kotlin
+│               └── prime-native.kt     # Kotlin-native source file
 └── rust-prime
-    ├── Cargo.toml                # Rust cargo manifest file
     └── src
         └── bin
-            └── prime.rs          # Rust source file
+            └── prime.rs                # Rust source file
 ```
 ---
 
@@ -37,6 +38,8 @@ This shows an implementation of a prime number calculator written in many differ
  🗙 **Ada** - Does support creating task functions that may be run as a thread, but does not have support for doing highly parallel iteration in a concise way.
 
  🗙 **JavaScript** - Can spawn child processes through the `worker_threads` API, but does not have any sort of multi-threading support within a program.
+ 
+ 🗙 **Kotlin Native** - The kotlinx-coroutines-core-native library does not support multi-threading so for the moment this version is broken until support is added
 
  ✓ **C** - Supports OpenMP through `#pragma omp`.
  
