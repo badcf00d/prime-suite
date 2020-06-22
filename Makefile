@@ -72,6 +72,10 @@ CPPCBC := $(CPPSRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.bc)
 
 KOTSRC := $(wildcard $(KOT_SRC_DIR)/*.kt)
 
+PYSRC := $(wildcard $(SRC_DIR)/*.py)
+
+JSSRC := $(wildcard $(SRC_DIR)/*.js)
+
 #
 # Deciding what the executables will be called
 #
@@ -175,3 +179,17 @@ generate-profile: all
 use-profile: CFLAGS += $(USE_PROFILE_CFLAGS)
 use-profile: LDFLAGS += $(USE_PROFILE_CFLAGS)
 use-profile: all
+
+
+test:
+	./$(F90OUT) 1000000
+	./$(COUT) 1000000
+	java $(subst ./,,$(JAVOUT:.class=)) 1000000
+	./$(GOOUT) 1000000
+	./$(ADAOUT) 1000000
+	./$(HSKOUT) 1000000
+	./$(CPPOUT) 1000000
+	python3 $(PYSRC) 1000000
+	node $(JSSRC) 1000000
+	$(RUSTOUT) 1000000
+	$(KOTOUT) 100
