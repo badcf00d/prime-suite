@@ -2,7 +2,7 @@
 This shows an implementation of a prime number calculator written in many different languages to demonstrate how the same program compares when written different languages, as well as showing roughly how performant each language can be.
 
 #### How to use
- - Install all of the prerequisites: `gfortran gcc g++ default-jdk go gnat haskell-platform nodejs python3`, [kotlin](https://kotlinlang.org/docs/tutorials/command-line.html), [gradle](https://gradle.org/install/) and [rustup](https://rustup.rs/)
+ - Install all of the prerequisites: `gfortran gcc g++ default-jdk go gnat haskell-platform nodejs python3`, [kotlin](https://kotlinlang.org/docs/tutorials/command-line.html), [gradle](https://gradle.org/install/), [scala](https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Linux.html) and [rustup](https://rustup.rs/)
    - You could use the commands from [actions script](https://github.com/badcf00d/prime-suite/blob/master/.github/workflows/test_build.yml) to install these.
  - `make` runs the default `all` recipe which compiles all of the source files.
    - If you want to just make one of the languages do `make` and then the language e.g. `make fortran`
@@ -23,14 +23,19 @@ This shows an implementation of a prime number calculator written in many differ
 ├── prime.js                            # JavaScript source file
 ├── prime.py                            # Python 3 source file
 ├── kotlin-native-prime
-│   └── src
-│       └── commonMain
-│           └── kotlin
-│               └── prime.kt            # Kotlin source file
-└── rust-prime
+│   ├── src
+│   │   └── commonMain
+│   │       └── kotlin
+│   │           └── prime.kt            # Kotlin source file
+├── rust-prime
+│   ├── src
+│   │   └── bin
+│   │       └── prime.rs                # Rust source file
+└── scala-prime
     └── src
-        └── bin
-            └── prime.rs                # Rust source file
+        └── main
+            └── scala
+                └── prime.scala         # Scala source file
 ```
 ---
 
@@ -57,4 +62,5 @@ This shows an implementation of a prime number calculator written in many differ
  ✓ **Python** - Supports multi-threading with `ThreadPoolExecutor` from concurrent.futures, and multi-processing from `multiprocessing`. The multi-processing approach was significantly faster in this example so that is what's used here.
  
  ✓ **Rust** - The Rayon library adds supports for the `par_iter_mut().enumerate().for_each()` method which provides a multi-threaded iterator.
- 
+
+ ✓ **Scala** - The `scala.collection.parallel.CollectionConverters` library provides a parallel iterator `par.foreach`
