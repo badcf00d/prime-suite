@@ -21,7 +21,7 @@ jobs:
     # echo "mtools_skip_check=1" >> ~/.mtoolsrc
     - name: Prerequisites
       run: |
-        sudo apt-get install gfortran gcc g++ default-jdk gnat haskell-platform nodejs python3
+        sudo apt-get install -y gfortran gcc g++ default-jdk gnat haskell-platform nodejs python3
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
         bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
         echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> ~/.profile
