@@ -3,6 +3,7 @@ This shows an implementation of a prime number calculator written in many differ
 
 #### How to use
  - Install all of the prerequisites: `gfortran gcc g++ default-jdk go gnat haskell-platform nodejs python3`, [kotlin](https://kotlinlang.org/docs/tutorials/command-line.html), [gradle](https://gradle.org/install/) and [rustup](https://rustup.rs/)
+   - You could use the commands from [actions script](https://github.com/badcf00d/prime-suite/blob/master/.github/workflows/test_build.yml) to install these.
  - `make` runs the default `all` recipe which compiles all of the source files.
    - If you want to just make one of the languages do `make` and then the language e.g. `make fortran`
  - The programs take a numerical argument e.g. `c-prime 100` or `python3 prime.py 100` which will produce all the primes up to 100 (inclusive). 
