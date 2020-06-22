@@ -10,6 +10,7 @@ AC := gnatmake
 HC := ghc
 CPPC := g++
 KC := kotlinc
+SC := scalac
 
 #
 # Flags
@@ -19,6 +20,7 @@ LDFLAGS := -fopenmp -lm
 ADAFLAGS := -Wall -O2 -march=native
 HSKFLAGS := -Wall -O2 -dynamic -threaded -package parallel
 KOTFLAGS := -include-runtime -jvm-target 1.8
+SCAFLAGS := -deprecation
 GEN_PROFILE_CFLAGS = -fprofile-generate -fprofile-update=single -pg
 USE_PROFILE_CFLAGS = -fprofile-use -Wno-error=coverage-mismatch
 
@@ -34,6 +36,9 @@ RUST_OUT_DIR := $(RUST_DIR)/target/release
 KOT_DIR := ./kotlin-native-prime
 KOT_SRC_DIR := $(KOT_DIR)/src/commonMain/kotlin
 KOT_OUT_DIR := $(KOT_DIR)/build
+SCA_DIR := ./scala-prime
+SCA_SRC_DIR := $(SCA_DIR)/src/main/scala
+SCA_OUT_DIR := $(shell echo $(SCA_DIR)/target/scala-*)
 
 #
 # Locating source files
@@ -76,6 +81,8 @@ PYSRC := $(wildcard $(SRC_DIR)/*.py)
 
 JSSRC := $(wildcard $(SRC_DIR)/*.js)
 
+SCASRC := $(wildcard $(SCA_SRC_DIR)/*.scala)
+
 #
 # Deciding what the executables will be called
 #
@@ -88,6 +95,7 @@ ifeq ($(OS),Windows_NT)
 	HSKOUT := haskell-prime.exe
 	CPPOUT := cpp-prime.exe
 	KOTOUT := $(KOT_OUT_DIR)/bin/windows/releaseExecutable/kotlin-native-prime.exe
+	SCAOUT := $(SCA_OUT_DIR)/scala-prime-assembly-0.1.jar
 else
 	F90OUT := fortran-prime
 	COUT := c-prime
@@ -97,6 +105,7 @@ else
 	HSKOUT := haskell-prime
 	CPPOUT := cpp-prime
 	KOTOUT := $(KOT_OUT_DIR)/bin/linux/releaseExecutable/kotlin-native-prime.kexe
+	SCAOUT := $(SCA_OUT_DIR)/scala-prime-assembly-0.1.jar
 endif
 
 
@@ -106,7 +115,7 @@ endif
 #
 .PHONY: clean all generate-profile use-profile fortran c java go ada rust haskell cpp
 
-all: $(F90OUT) $(COUT) $(JAVOUT) $(GOOUT) $(ADAOUT) $(RUSTOUT) $(HSKOUT) $(CPPOUT) $(KOTOUT)
+all: $(F90OUT) $(COUT) $(JAVOUT) $(GOOUT) $(ADAOUT) $(RUSTOUT) $(HSKOUT) $(CPPOUT) $(KOTOUT) $(SCAOUT)
 fortran: $(F90OUT)
 c: $(COUT)
 java: $(JAVOUT)
@@ -116,7 +125,7 @@ rust: $(RUSTOUT)
 haskell: $(HSKOUT)
 cpp: $(CPPOUT)
 kotlin: $(KOTOUT)
-
+scala: $(SCAOUT)
 
 #
 # Defining recipies to build file types
@@ -152,6 +161,10 @@ else
 	cd $(KOT_DIR) && gradle linuxBinaries
 endif
 
+$(SCAOUT): $(SCASRC)
+	cd $(SCA_DIR) && sbt assembly
+
+
 $(OBJ_DIR)/%.fortran.o: $(SRC_DIR)/%.f90
 	$(FC) $(CFLAGS) -c $< -o $@
 
@@ -167,6 +180,7 @@ $(OBJ_DIR)/%.cpp.o: $(SRC_DIR)/%.cpp
 clean:
 	rm -f $(F90OBJ) $(F90OUT) $(F90ASM) $(F90MOD) $(COBJ) $(COUT) $(CASM) $(CPRE) $(CCBC) $(RUSTOUT) $(JAVOUT) $(GOOUT) $(ADAOBJ) $(ADAALI) $(ADAOUT) $(HSKOUT) $(HSKOBJ) $(HSKINT) $(CPPOBJ) $(CPPOUT) $(CPPASM) $(CPPPRE) $(CPPCBC)
 	rm -rf $(KOT_OUT_DIR)
+	rm -rf $(SCA_DIR)/target
 
 #
 # Stuff for profile guided optimisation
@@ -184,12 +198,13 @@ use-profile: all
 test:
 	./$(F90OUT) 1000000
 	./$(COUT) 1000000
-	java $(subst ./,,$(JAVOUT:.class=)) 1000000
 	./$(GOOUT) 1000000
 	./$(ADAOUT) 1000000
-	./$(HSKOUT) 1000000
+	./$(HSKOUT) 1000000 +RTS -N$(shell grep -c ^processor /proc/cpuinfo)
 	./$(CPPOUT) 1000000
 	python3 $(PYSRC) 1000000
 	node $(JSSRC) 1000000
+	java $(subst ./,,$(JAVOUT:.class=)) 1000000
+	scala $(SCAOUT) 1000000
 	$(RUSTOUT) 1000000
 	$(KOTOUT) 100
