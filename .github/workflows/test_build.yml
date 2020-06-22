@@ -26,7 +26,7 @@ jobs:
         bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
         echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> ~/.profile
         eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-        brew install gradle kotlin go
+        brew install gradle kotlin go || true
         echo 'export PATH="/home/linuxbrew/.linuxbrew/opt/openjdk/bin:$PATH"' >> /home/runner/.bash_profile
 
     - name: Normal Compile
