@@ -28,7 +28,7 @@ class prime                                                             // Defin
             }
         }
 
-        for (divisor <- 5 until testLimit by 6)                         // Loop from divisor = 5 to testLimit (inclusive), increment by 6
+        for (divisor <- 5 until (testLimit + 1) by 6)                   // Loop from divisor = 5 to testLimit (inclusive), increment by 6
         {
             if ((testNum % divisor) == 0)                               // Test if it divides by the divisor (i.e. 6k - 1)
                 {
