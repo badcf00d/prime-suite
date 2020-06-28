@@ -2,12 +2,13 @@
 This shows an implementation of a prime number calculator written in many different languages to demonstrate how the same program compares when written different languages, as well as showing roughly how performant each language can be.
 
 #### How to use
- - Install all of the prerequisites: `gfortran gcc g++ default-jdk go gnat haskell-platform nodejs python3`, [kotlin](https://kotlinlang.org/docs/tutorials/command-line.html), [gradle](https://gradle.org/install/), [scala](https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Linux.html) and [rustup](https://rustup.rs/)
+ - Install all of the prerequisites: `gfortran gcc g++ default-jdk go gnat haskell-platform nodejs python3 ruby-full`, [kotlin](https://kotlinlang.org/docs/tutorials/command-line.html), [gradle](https://gradle.org/install/), [scala](https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Linux.html) and [rustup](https://rustup.rs/)
    - You could use the commands from [actions script](https://github.com/badcf00d/prime-suite/blob/master/.github/workflows/test_build.yml) to install these.
  - `make` runs the default `all` recipe which compiles all of the source files.
    - If you want to just make one of the languages do `make` and then the language e.g. `make fortran`
  - The programs take a numerical argument e.g. `c-prime 100` or `python3 prime.py 100` which will produce all the primes up to 100 (inclusive). 
    - The only slight exception is Haskell where you need some additional arguments to enable multithreading e.g. `haskell-prime 100 +RTS -N<number of threads>`
+ - `make test` runs all of the programs to produce primes up to 1,000,000.
  - `make clean` deletes all of the files created by the build process.
  
 #### Source Contents
@@ -22,6 +23,7 @@ This shows an implementation of a prime number calculator written in many differ
 ├── prime.java                          # Java source file
 ├── prime.js                            # JavaScript source file
 ├── prime.py                            # Python 3 source file
+├── prime.rb                            # Ruby source file
 ├── kotlin-native-prime
 │   ├── src
 │   │   └── commonMain
@@ -64,3 +66,5 @@ This shows an implementation of a prime number calculator written in many differ
  ✓ **Rust** - The Rayon library adds supports for the `par_iter_mut().enumerate().for_each()` method which provides a multi-threaded iterator.
 
  ✓ **Scala** - The `scala.collection.parallel.CollectionConverters` library provides a parallel iterator `par.foreach`
+
+ ✓ **Ruby** - The `parallel` module for ruby adds various parallel iterators that can provide parallel multi-processing or concurrent (but not parallel) multi-threading.

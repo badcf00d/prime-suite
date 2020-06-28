@@ -83,6 +83,8 @@ JSSRC := $(wildcard $(SRC_DIR)/*.js)
 
 SCASRC := $(wildcard $(SCA_SRC_DIR)/*.scala)
 
+RUBSRC := $(wildcard $(SRC_DIR)/*.rb)
+
 #
 # Deciding what the executables will be called
 #
@@ -206,5 +208,6 @@ test:
 	node $(JSSRC) 1000000
 	java $(subst ./,,$(JAVOUT:.class=)) 1000000
 	scala $(SCAOUT) 1000000
+	ruby $(RUBSRC) 1000000
 	$(RUSTOUT) 1000000
 	$(KOTOUT) 100
