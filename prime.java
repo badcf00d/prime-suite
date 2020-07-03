@@ -87,7 +87,6 @@ public class prime                                                          // A
     //
     public static void main(String args[]) 
     { 
-        // Using Scanner for Getting Input from User 
         prime prime = new prime();
         int numPrimes, maxNumber;
 
