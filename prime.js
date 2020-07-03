@@ -1,6 +1,8 @@
-var primeList = [0];                                                    // Global variable, array [] of numbers
 
-
+// Factor test by trial division using the 6k +- 1 optimisation, this
+// means that factors of factors will not be displayed, i.e. if the test
+// number is a factor of 2, it will not show 4, 6, 8 etc.
+//
 function findFactors(testNum, verbose)
 {
     const testLimit = Math.floor(Math.sqrt(testNum));                   // Local constant variable
@@ -9,7 +11,7 @@ function findFactors(testNum, verbose)
     if (testNum <= 3)
     {
         isPrime = (testNum > 1);
-        if (verbose) console.log(`Special case ${testNum}`);            // ${} means print an integer
+        if (verbose) console.log(`Special case ${testNum}`);            // ${} means print some variable, or the result of some expression
     }
     else 
     {
@@ -42,39 +44,35 @@ function findFactors(testNum, verbose)
 
 
 
-
+// Helper function for calculating all prime numbers up to maxNumber
+//
 function primeListTest(maxNumber)
 {
     var numPrimes = 0;
-
-    for (var i = 1; i <= maxNumber; i++)
-    {  
-        primeList.push(0);                                              // A bit like dynamic memory allocation, initialize to 0
-    }
+    var primeList = [0];                                                // Global variable, array [] of numbers with just a single 0 in for now
 
     for (var i = 1; i <= maxNumber; i++)                                // Loop from i = 1 to maxNumber (inclusive), increment by 1 
     {                                                                   
         if (findFactors(i, false) == true)                              // Is this number (i) prime?
         {
-            primeList[i - 1] = i;                                       // Arrays start at 0 in JS
-        }
-    }
-
-    for (var i = 0; i < maxNumber; i++)                                 // This loop essentially removes the blanks and bunches all the primes up next to eachother in primeList
-    {
-        if (primeList[i] != 0)
-        {
-            primeList[numPrimes] = primeList[i];
+            primeList[numPrimes] = i;                                       // Arrays start at 0 in JS
             numPrimes++;                                                // Count up the number of primes we found
         }
     }
 
-    return numPrimes;
+    return [numPrimes, primeList];                                      // You can return arrays of objects in JS, which is handy
 }
 
 
-let maxNumber = parseInt(process.argv[2]);                          // argv[0] will be 'node', argv[1] will be the js file, the first argument is argv[2]
-var numPrimes = primeListTest(maxNumber);                           // Calculates all prime numbers up to maxNumber
+
+
+// This section of code will be the start because it's 
+// the first part that's not part of a definition for 
+// a function.
+//
+const maxNumber = parseInt(process.argv[2]);                            // argv[0] will be 'node', argv[1] will be the js file, the first argument is argv[2]
+const [numPrimes, primeList] = primeListTest(maxNumber);                // Calculates all prime numbers up to maxNumber
 
 console.log(`Generated ${numPrimes} primes, Largest was: ${primeList[numPrimes - 1]}`);
-return process.exit(0);                                             // node.js programs don't exit by themselves, need to manually exit
+
+return process.exit(0);                                                 // node.js programs don't exit by themselves, need to manually exit (0 means no errors occured)
