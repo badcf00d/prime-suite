@@ -65,6 +65,6 @@ This shows an implementation of a prime number calculator written in many differ
  
  ✓ **Rust** - The Rayon library adds supports for the `par_iter_mut().enumerate().for_each()` method which provides a multi-threaded iterator.
 
- ✓ **Scala** - The `scala.collection.parallel.CollectionConverters` library provides a parallel iterator `par.foreach`
+ ✓ **Scala** - The `scala.collection.parallel.CollectionConverters` library provides a parallel iterator `par.foreach`.
 
  ✓ **Ruby** - The `parallel` module for ruby adds various parallel iterators that can provide parallel multi-processing or concurrent (but not parallel) multi-threading.
