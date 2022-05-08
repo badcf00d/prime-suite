@@ -21,15 +21,13 @@ jobs:
     # echo "mtools_skip_check=1" >> ~/.mtoolsrc
     - name: Prerequisites
       run: |
-        sudo apt-get install -y gfortran gcc g++ gnat haskell-platform nodejs python3 ruby-full libncurses5
+        sudo apt-get install -y gfortran gcc g++ gnat haskell-platform nodejs python3 ruby-full libncurses5 openjdk-11-jdk golang-go
         cabal update
         cabal install --lib parallel
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-        echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> ~/.profile
-        eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-        brew install openjdk@11 gradle kotlin go scala sbt || true
-        echo 'export PATH="/home/linuxbrew/.linuxbrew/opt/openjdk/bin:$PATH"' >> /home/runner/.bash_profile
+        curl -s "https://get.sdkman.io" | bash
+        source "$HOME/.sdkman/bin/sdkman-init.sh"
+        sdk install kotlin gradle scala sbt
         sudo gem install parallel
 
     - name: Normal Compile
