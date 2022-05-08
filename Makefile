@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 
 #
 # Compilers
@@ -15,12 +16,10 @@ SC := scalac
 #
 # Flags
 #
-CFLAGS := -Wall -O2 -fopenmp -march=native -fverbose-asm
+CFLAGS := -Wall -O3 -fopenmp -march=native -fverbose-asm
 LDFLAGS := -fopenmp -lm
 ADAFLAGS := -Wall -O2 -march=native
 HSKFLAGS := -Wall -O2 -dynamic -threaded -package parallel
-KOTFLAGS := -include-runtime -jvm-target 1.8
-SCAFLAGS := -deprecation
 GEN_PROFILE_CFLAGS = -fprofile-generate -fprofile-update=single -pg
 USE_PROFILE_CFLAGS = -fprofile-use -Wno-error=coverage-mismatch
 
@@ -198,16 +197,16 @@ use-profile: all
 
 
 test:
-	./$(F90OUT) 1000000
-	./$(COUT) 1000000
-	./$(GOOUT) 1000000
-	./$(ADAOUT) 1000000
-	./$(HSKOUT) 1000000 +RTS -N$(shell grep -c ^processor /proc/cpuinfo)
-	./$(CPPOUT) 1000000
-	python3 $(PYSRC) 1000000
-	node $(JSSRC) 1000000
-	java $(subst ./,,$(JAVOUT:.class=)) 1000000
-	scala $(SCAOUT) 1000000
-	ruby $(RUBSRC) 1000000
-	$(RUSTOUT) 1000000
-	$(KOTOUT) 100
+	time ./$(COUT) 1000000
+	time ./$(CPPOUT) 1000000
+	time ./$(F90OUT) 1000000
+	time ./$(GOOUT) 1000000
+	time ./$(ADAOUT) 1000000
+	time ./$(HSKOUT) 1000000 +RTS -N$(shell grep -c ^processor /proc/cpuinfo)
+	time $(RUSTOUT) 1000000
+	time python3 $(PYSRC) 1000000
+	time node $(JSSRC) 1000000
+	time java $(subst ./,,$(JAVOUT:.class=)) 1000000
+	time scala $(SCAOUT) 1000000
+	time ruby $(RUBSRC) 1000
+	time $(KOTOUT) 1000
