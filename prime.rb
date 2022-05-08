@@ -12,33 +12,35 @@ def findFactors(testNum, verbose)
 
     if testNum <= 3
         isPrime = (testNum > 1);
-        if verbose 
+        if verbose
             puts "Special case %d" % [testNum]                          # %d means print an integer
-        end               
-    else 
+        end
+    else
         for i in 2..3                                                   # Test for divisibility by 2 and 3
-            if ((testNum % i) == 0) 
+            if ((testNum % i) == 0)
                 isPrime = false
-                if verbose 
-                    puts "divides by %d" % [i] 
+                if verbose
+                    puts "divides by %d" % [i]
                 end
             end
         end
     end
 
-    for divisor in (5..testLimit).step(6)                               # Loop from divisor = 5 to testLimit (inclusive), increment by 6
-        if ((testNum % divisor) == 0)                                   # Test if it divides by the divisor (i.e. 6k - 1)
-            if verbose 
-                puts "divides by %d" % [divisor] 
+    if isPrime == true
+        for divisor in (5..testLimit).step(6)                           # Loop from divisor = 5 to testLimit (inclusive), increment by 6
+            if ((testNum % divisor) == 0)                               # Test if it divides by the divisor (i.e. 6k - 1)
+                if verbose
+                    puts "divides by %d" % [divisor]
+                end
+                isPrime = false
             end
-            isPrime = false
-        end
 
-        if ((testNum % (divisor + 2)) == 0)                             # Test if it divides by the divisor + 2 (i.e. 6k + 1)
-            if verbose 
-                puts "divides by %d" % [divisor + 2] 
+            if ((testNum % (divisor + 2)) == 0)                         # Test if it divides by the divisor + 2 (i.e. 6k + 1)
+                if verbose
+                    puts "divides by %d" % [divisor + 2]
+                end
+                isPrime = false
             end
-            isPrime = false
         end
     end
 

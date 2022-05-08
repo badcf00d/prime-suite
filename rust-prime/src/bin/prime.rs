@@ -17,11 +17,11 @@ fn findFactors(testNum:i32, verbose:bool) -> bool
         isPrime = testNum > 1;
         if verbose { println!("Special case {}", testNum); }            // {} means print an argument, a bit like % in C
     }
-    else 
+    else
     {
         for i in 2..4                                                   // Test for divisibility by 2 and 3
         {
-            if (testNum % i) == 0 
+            if (testNum % i) == 0
             {
                 isPrime = false;
                 if verbose { println!("divides by {}", i); }
@@ -29,21 +29,23 @@ fn findFactors(testNum:i32, verbose:bool) -> bool
         }
     }
 
-    for divisor in (5..(testLimit + 1)).step_by(6)                      // Loop from divisor = 5 to testLimit (inclusive), increment by 6
-    {      
-        if (testNum % divisor) == 0                                     // Test if it divides by the divisor (i.e. 6k - 1)
-        {                           
-            if verbose { println!("divides by {}", divisor); } 
-            isPrime = false;
-        }
+    if isPrime == true
+    {
+        for divisor in (5..(testLimit + 1)).step_by(6)                  // Loop from divisor = 5 to testLimit (inclusive), increment by 6
+        {
+            if (testNum % divisor) == 0                                 // Test if it divides by the divisor (i.e. 6k - 1)
+            {
+                if verbose { println!("divides by {}", divisor); }
+                isPrime = false;
+            }
 
-        if (testNum % (divisor + 2)) == 0                               // Test if it divides by the divisor + 2 (i.e. 6k + 1)
-        {                       
-            if verbose { println!("divides by {}", divisor + 2); }
-            isPrime = false;
+            if (testNum % (divisor + 2)) == 0                           // Test if it divides by the divisor + 2 (i.e. 6k + 1)
+            {
+                if verbose { println!("divides by {}", divisor + 2); }
+                isPrime = false;
+            }
         }
     }
-
     return isPrime;
 }
 
@@ -72,14 +74,13 @@ fn primeListTest(maxNumber:i32) -> (usize, Vec<usize>)
             numPrimes += 1;
         }
     }
-
     return (numPrimes, primeList);
 }
 
 
 // main is the default name for the starting point of a program in Rust
 //
-fn main() 
+fn main()
 {
     let args: Vec<String> = env::args().collect();                      // Gets an array of strings containing all the command line arguments
     let maxNumber:i32 = args[1].parse().unwrap();                       // argv[0] will be the rs file, the first argument is argv[1], and convert to an integer

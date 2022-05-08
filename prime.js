@@ -13,11 +13,11 @@ function findFactors(testNum, verbose)
         isPrime = (testNum > 1);
         if (verbose) console.log(`Special case ${testNum}`);            // ${} means print some variable, or the result of some expression
     }
-    else 
+    else
     {
         for (var i = 2; i <= 3; i++)                                    // Test for divisibility by 2 and 3
         {
-            if ((testNum % i) == 0) 
+            if ((testNum % i) == 0)
             {
                 isPrime = false;
                 if (verbose) console.log(`divides by ${i}`);
@@ -25,18 +25,21 @@ function findFactors(testNum, verbose)
         }
     }
 
-    for (var divisor = 5; divisor <= testLimit; divisor += 6)           // Loop from divisor = 5 to testLimit (inclusive), increment by 6
-    {      
-        if ((testNum % divisor) == 0)                                   // Test if it divides by the divisor (i.e. 6k - 1)
-        {                           
-            if (verbose) console.log(`divides by ${divisor}`); 
-            isPrime = false;
-        }
+    if (isPrime == true)
+    {
+        for (var divisor = 5; divisor <= testLimit; divisor += 6)       // Loop from divisor = 5 to testLimit (inclusive), increment by 6
+        {
+            if ((testNum % divisor) == 0)                               // Test if it divides by the divisor (i.e. 6k - 1)
+            {
+                if (verbose) console.log(`divides by ${divisor}`);
+                isPrime = false;
+            }
 
-        if ((testNum % (divisor + 2)) == 0)                             // Test if it divides by the divisor + 2 (i.e. 6k + 1)
-        {                       
-            if (verbose) console.log(`divides by ${divisor + 2}`);
-            isPrime = false;
+            if ((testNum % (divisor + 2)) == 0)                         // Test if it divides by the divisor + 2 (i.e. 6k + 1)
+            {
+                if (verbose) console.log(`divides by ${divisor + 2}`);
+                isPrime = false;
+            }
         }
     }
     return isPrime;
@@ -51,23 +54,22 @@ function primeListTest(maxNumber)
     var numPrimes = 0;
     var primeList = [0];                                                // Global variable, array [] of numbers with just a single 0 in for now
 
-    for (var i = 1; i <= maxNumber; i++)                                // Loop from i = 1 to maxNumber (inclusive), increment by 1 
-    {                                                                   
+    for (var i = 1; i <= maxNumber; i++)                                // Loop from i = 1 to maxNumber (inclusive), increment by 1
+    {
         if (findFactors(i, false) == true)                              // Is this number (i) prime?
         {
             primeList[numPrimes] = i;                                       // Arrays start at 0 in JS
             numPrimes++;                                                // Count up the number of primes we found
         }
     }
-
     return [numPrimes, primeList];                                      // You can return arrays of objects in JS, which is handy
 }
 
 
 
 
-// This section of code will be the start because it's 
-// the first part that's not part of a definition for 
+// This section of code will be the start because it's
+// the first part that's not part of a definition for
 // a function.
 //
 const maxNumber = parseInt(process.argv[2]);                            // argv[0] will be 'node', argv[1] will be the js file, the first argument is argv[2]

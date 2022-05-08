@@ -28,21 +28,23 @@ class prime                                                             // Defin
             }
         }
 
-        for (divisor <- 5 until (testLimit + 1) by 6)                   // Loop from divisor = 5 to testLimit (inclusive), increment by 6
+        if (isPrime == true)
         {
-            if ((testNum % divisor) == 0)                               // Test if it divides by the divisor (i.e. 6k - 1)
-                {
-                    if (verbose) println("divides by " + divisor);
-                    isPrime = false;
-                }
+            for (divisor <- 5 until (testLimit + 1) by 6)               // Loop from divisor = 5 to testLimit (inclusive), increment by 6
+            {
+                if ((testNum % divisor) == 0)                           // Test if it divides by the divisor (i.e. 6k - 1)
+                    {
+                        if (verbose) println("divides by " + divisor);
+                        isPrime = false;
+                    }
 
-            if ((testNum % (divisor + 2)) == 0)                         // Test if it divides by the divisor + 2 (i.e. 6k + 1)
-                {
-                    if (verbose) println("divides by " + (divisor + 2));
-                    isPrime = false;
-                }
+                if ((testNum % (divisor + 2)) == 0)                     // Test if it divides by the divisor + 2 (i.e. 6k + 1)
+                    {
+                        if (verbose) println("divides by " + (divisor + 2));
+                        isPrime = false;
+                    }
+            }
         }
-
         return isPrime;
     }
 

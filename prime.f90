@@ -9,7 +9,7 @@ module primeMod                                                         ! Essent
     ! Factor test by trial division using the 6k +- 1 optimisation, this
     ! means that factors of factors will not be displayed, i.e. if the test
     ! number is a factor of 2, it will not show 4, 6, 8 etc.
-    ! 
+    !
     function findFactors(testNum, verbose) result(isPrime)
         integer, intent(in) :: testNum                                  ! (in)put variable
         integer             :: divisor, testLimit                       ! Local variable
@@ -22,26 +22,28 @@ module primeMod                                                         ! Essent
         if (testNum <= 3) then
             isPrime = (testNum > 1)
             if (verbose) write(*,*) 'Special case', testNum             ! The first * means write to stdout, the next * means auto-format
-        else 
+        else
             do divisor = 2, 3                                           ! Test for divisibility by 2 and 3
-                if (mod(testNum, divisor) == 0) then                    
+                if (mod(testNum, divisor) == 0) then
                     isPrime = .false.
                     if (verbose) write(*,*) 'divides by ', divisor
-                end if   
+                end if
             end do
         end if
 
-        do divisor = 5, testLimit, 6                                    ! Loop from divisor = 5 to testLimit (inclusive), increment by 6
-            if (mod(testNum, divisor) == 0) then                        ! Test if it divides by the divisor (i.e 6k - 1)
-                if (verbose) write(*,*) 'divides by', divisor
-                isPrime = .false.
-            end if
+        if (isPrime .eqv. .true.) then
+            do divisor = 5, testLimit, 6                                ! Loop from divisor = 5 to testLimit (inclusive), increment by 6
+                if (mod(testNum, divisor) == 0) then                    ! Test if it divides by the divisor (i.e 6k - 1)
+                    if (verbose) write(*,*) 'divides by', divisor
+                    isPrime = .false.
+                end if
 
-            if (mod(testNum, divisor + 2) == 0) then                    ! Test if it divides by the divisor + 2 (i.e 6k + 1)
-                if (verbose) write(*,*) 'divides by', divisor + 2
-                isPrime = .false.
-            end if
-        end do
+                if (mod(testNum, divisor + 2) == 0) then                ! Test if it divides by the divisor + 2 (i.e 6k + 1)
+                    if (verbose) write(*,*) 'divides by', divisor + 2
+                    isPrime = .false.
+                end if
+            end do
+        end if
     end function findFactors
 
 

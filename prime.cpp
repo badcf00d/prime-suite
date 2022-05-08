@@ -19,7 +19,7 @@ class prime                                                             // We've
 // means that factors of factors will not be displayed, i.e. if the test
 // number is a factor of 2, it will not show 4, 6, 8 etc.
 //
-// The :: here means this is the definition of the findFactors function 
+// The :: here means this is the definition of the findFactors function
 // prototype in the prime class, not a standalone function.
 //
 bool prime::findFactors(const int testNum, bool verbose)
@@ -30,35 +30,37 @@ bool prime::findFactors(const int testNum, bool verbose)
     if (testNum <= 3)
     {
         isPrime = (testNum > 1);
-        if (verbose) printf("Special case %d", testNum);                // %d means print an integer
+        if (verbose) printf("Special case %d\n", testNum);                // %d means print an integer
     }
-    else 
+    else
     {
         for (int i = 2; i <= 3; i++)                                    // Test for divisibility by 2 and 3
         {
-            if ((testNum % i) == 0) 
+            if ((testNum % i) == 0)
             {
                 isPrime = false;
-                if (verbose) printf("divides by %d", i);
+                if (verbose) printf("divides by %d\n", i);
             }
         }
     }
 
-    for (int divisor = 5; divisor <= testLimit; divisor += 6)           // Loop from divisor = 5 to testLimit (inclusive), increment by 6
-    {      
-        if ((testNum % divisor) == 0)                                   // Test if it divides by the divisor (i.e. 6k - 1)
-        {                           
-            if (verbose) printf("divides by %d", divisor); 
-            isPrime = false;
-        }
+    if (isPrime)
+    {
+        for (int divisor = 5; divisor <= testLimit; divisor += 6)       // Loop from divisor = 5 to testLimit (inclusive), increment by 6
+        {
+            if ((testNum % divisor) == 0)                               // Test if it divides by the divisor (i.e. 6k - 1)
+            {
+                if (verbose) printf("divides by %d\n", divisor);
+                isPrime = false;
+            }
 
-        if ((testNum % (divisor + 2)) == 0)                             // Test if it divides by the divisor + 2 (i.e. 6k + 1)
-        {                       
-            if (verbose) printf("divides by %d", divisor + 2);
-            isPrime = false;
+            if ((testNum % (divisor + 2)) == 0)                         // Test if it divides by the divisor + 2 (i.e. 6k + 1)
+            {
+                if (verbose) printf("divides by %d\n", divisor + 2);
+                isPrime = false;
+            }
         }
     }
-
     return isPrime;
 }
 
@@ -73,8 +75,8 @@ int prime::primeListTest(const int maxNumber)
     primeList.resize(maxNumber, 0);                                     // Initialises our primeList with maxNumber amount of zeros
 
     #pragma omp parallel for schedule(guided)                           // Uses OpenMP to create multiple threads to run this loop in parallel
-    for (int i = 1; i <= maxNumber; i++)                                // Loop from i = 1 to maxNumber (inclusive), increment by 1 
-    {                                                                   
+    for (int i = 1; i <= maxNumber; i++)                                // Loop from i = 1 to maxNumber (inclusive), increment by 1
+    {
         if (findFactors(i, false) == true)                              // Is this number (i) prime?
         {
             primeList[i - 1] = i;                                       // Vectors start at 0 in C++
@@ -89,7 +91,6 @@ int prime::primeListTest(const int maxNumber)
             numPrimes++;                                                // Count up the number of primes we found
         }
     }
-
     return numPrimes;
 }
 
@@ -99,12 +100,12 @@ int prime::primeListTest(const int maxNumber)
 
 // main is the default name for the starting point of a program in C++
 //
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
     int maxNumber, numPrimes;                                           // local variables only visible to this function
     prime prime;                                                        // Creates a new instance of the prime class accessible to this function only
     maxNumber = atoi(argv[1]);                                          // atoi = Ascii TO Integer, argv[0] will be the name of the executable, the first argument is argv[1]
     numPrimes = prime.primeListTest(maxNumber);                         // Calculates all prime numbers up to maxNumber
-    
-    printf("Generated %d primes, Largest was: %d \n", numPrimes, prime.primeList[numPrimes - 1]);
+
+    printf("Generated %d primes, Largest was: %d\n", numPrimes, prime.primeList[numPrimes - 1]);
 }

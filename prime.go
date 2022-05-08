@@ -34,22 +34,23 @@ func findFactors(testNum int, verbose bool) bool {
 		}
 	}
 
-	for divisor := 5; divisor <= testLimit; divisor += 6 { // Loop from divisor = 5 to testLimit (inclusive), increment by 6
-		if (testNum % divisor) == 0 { // Test if it divides by the divisor (i.e. 6k - 1)
-			if verbose {
-				fmt.Printf("divides by %d", divisor)
+	if isPrime == true {
+		for divisor := 5; divisor <= testLimit; divisor += 6 { // Loop from divisor = 5 to testLimit (inclusive), increment by 6
+			if (testNum % divisor) == 0 { // Test if it divides by the divisor (i.e. 6k - 1)
+				if verbose {
+					fmt.Printf("divides by %d", divisor)
+				}
+				isPrime = false
 			}
-			isPrime = false
-		}
 
-		if (testNum % (divisor + 2)) == 0 { // Test if it divides by the divisor + 2 (i.e. 6k + 1)
-			if verbose {
-				fmt.Printf("divides by %d", divisor+2)
+			if (testNum % (divisor + 2)) == 0 { // Test if it divides by the divisor + 2 (i.e. 6k + 1)
+				if verbose {
+					fmt.Printf("divides by %d", divisor+2)
+				}
+				isPrime = false
 			}
-			isPrime = false
 		}
 	}
-
 	return isPrime
 }
 
@@ -79,7 +80,6 @@ func primeListTest(maxNumber int) int {
 			numPrimes++ // Count up the number of primes we found
 		}
 	}
-
 	return numPrimes
 }
 
