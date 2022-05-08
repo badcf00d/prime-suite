@@ -1,10 +1,16 @@
 import kotlinx.coroutines.*
 import kotlin.math.*;                                                   // Gives us math functions like floor and sqrt
 
+private lateinit var primeList : List<Int>;                             // An empty list that is visible to anything in this file, lateinit allows the value to be uninitialised
 
-var primeList : IntArray = intArrayOf(0);                               // An empty array that is only visible to anything in this file
 
-
+// A function signature for a map function that can run asyncronysly
+// under a coroutuine. The input Iterable `A` is iterated over by function `f`
+// with each input `it` asynchronously, while the awaitAll blocks the coroutine
+// until completion.
+suspend fun <A, B> Iterable<A>.parallelMap(f: suspend (A) -> B): List<B> = coroutineScope {
+    map { async { f(it) } }.awaitAll()
+}
 
 // Factor test by trial division using the 6k +- 1 optimisation, this
 // means that factors of factors will not be displayed, i.e. if the test
@@ -32,21 +38,23 @@ fun findFactors(testNum : Int, verbose : Boolean): Boolean
         }
     }
 
-    for (divisor in 5 until (testLimit + 1) step 6)                     // Loop from divisor = 5 to testLimit (inclusive), increment by 6
+    if (isPrime == true)
     {
-        if ((testNum % divisor) == 0)                                   // Test if it divides by the divisor (i.e. 6k - 1)
+        for (divisor in 5 until (testLimit + 1) step 6)                 // Loop from divisor = 5 to testLimit (inclusive), increment by 6
         {
-            if (verbose) println("divides by $divisor");
-            isPrime = false;
-        }
+            if ((testNum % divisor) == 0)                               // Test if it divides by the divisor (i.e. 6k - 1)
+            {
+                if (verbose) println("divides by $divisor");
+                isPrime = false;
+            }
 
-        if ((testNum % (divisor + 2)) == 0)                             // Test if it divides by the divisor + 2 (i.e. 6k + 1)
-        {
-            if (verbose) println("divides by ${divisor + 2}");          // You can also use $ with {} to do some operations before printing
-            isPrime = false;
+            if ((testNum % (divisor + 2)) == 0)                         // Test if it divides by the divisor + 2 (i.e. 6k + 1)
+            {
+                if (verbose) println("divides by ${divisor + 2}");      // You can also use $ with {} to do some operations before printing
+                isPrime = false;
+            }
         }
     }
-
     return isPrime;
 }
 
@@ -55,32 +63,17 @@ fun findFactors(testNum : Int, verbose : Boolean): Boolean
 //
 fun primeListTest(maxNumber : Int) : Int
 {
-    var numPrimes = 0
-    primeList = IntArray(maxNumber) {0}                                 // Dynamic memory allocation, initialized to 0
-
-    val deferred = (1..maxNumber).map {i ->
-        GlobalScope.async {
-            if (findFactors(i, false) == true)
-            {
-                primeList[i - 1] = i;                                   // Arrays start at 0 in Kotlin
-            }
+    primeList = runBlocking(Dispatchers.Default) {                      // Block while this section of code runs under a coroutine dispatcher that handles spawning threads
+        (1..maxNumber).parallelMap {                                    // Creates a list from 1 to maxNumber (inclusive) and passes it to the function defined above that spawns a coroutine for each element
+            if (findFactors(it, false) == true)
+                it;                                                     // If prime, return the current value to primeList
+            else
+                0;                                                      // If not prime, return 0 to primeList
         }
     }
 
-    runBlocking {
-        deferred.map { it.await() }                                     // 'it' in Kotlin is an implicit parameter for a Lambda functions like this
-    }
-
-    for (i in 0 .. (maxNumber - 1))                                     // This loop essentially removes the blanks and bunches all the primes up next to each other in primeList
-    {
-        if (primeList[i] != 0)
-        {
-            primeList[numPrimes] = primeList[i];
-            numPrimes++;                                                // Count up the number of primes we found
-        }
-    }
-
-    return numPrimes;
+    primeList = primeList.filter { it != 0 };                           // Remove all of the zeros from the list
+    return primeList.size;                                              // Return the number of primes in the list
 }
 
 
