@@ -30,6 +30,9 @@ jobs:
         sdk install kotlin
         sdk install gradle
         sdk install scala
+        which scala
+        export PATH="$HOME/.sdkman/candidates/scala/current/bin:$PATH"
+        which scala
         sdk install sbt
         sudo gem install parallel
 
