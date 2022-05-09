@@ -200,7 +200,7 @@ use-profile: all
 
 test: MAX_NUMBER := 50000000
 test: test-internal
-ci-test: MAX_NUMBER := 5000000
+ci-test: MAX_NUMBER := 1000000
 ci-test: test-internal
 
 test-internal:
