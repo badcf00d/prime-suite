@@ -115,7 +115,7 @@ endif
 #
 # Defining targerts
 #
-.PHONY: clean all generate-profile use-profile fortran c java go ada rust haskell cpp
+.PHONY: clean all generate-profile use-profile fortran c java go ada rust haskell cpp test ci-test
 
 all: $(F90OUT) $(COUT) $(JAVOUT) $(GOOUT) $(ADAOUT) $(RUSTOUT) $(HSKOUT) $(CPPOUT) $(KOTOUT) $(SCAOUT)
 fortran: $(F90OUT)
@@ -199,7 +199,11 @@ use-profile: all
 
 
 test: MAX_NUMBER := 50000000
-test:
+test: test-internal
+ci-test: MAX_NUMBER := 5000000
+ci-test: test-internal
+
+test-internal:
 	time ./$(COUT) $(MAX_NUMBER)
 	time ./$(CPPOUT) $(MAX_NUMBER)
 	time ./$(F90OUT) $(MAX_NUMBER)

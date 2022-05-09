@@ -34,7 +34,7 @@ jobs:
         sudo gem install parallel
 
     - name: Normal Compile
-      run: make -j$(grep -c ^processor /proc/cpuinfo)
+      run: make -j$(nproc)
 
     - name: Test
-      run: make test
+      run: make ci-test
