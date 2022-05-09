@@ -18,8 +18,8 @@ SC := scalac
 #
 CFLAGS := -Wall -O3 -fopenmp -march=native -fverbose-asm
 LDFLAGS := -fopenmp -lm
-ADAFLAGS := -Wall -O2 -march=native
-HSKFLAGS := -Wall -O2 -dynamic -threaded -package parallel
+ADAFLAGS := -Wall -O3 -march=native
+HSKFLAGS := -Wall -O3 -dynamic -threaded -package parallel
 GEN_PROFILE_CFLAGS = -fprofile-generate -fprofile-update=single -pg
 USE_PROFILE_CFLAGS = -fprofile-use -Wno-error=coverage-mismatch
 
@@ -38,6 +38,7 @@ KOT_OUT_DIR := $(KOT_DIR)/build
 SCA_DIR := ./scala-prime
 SCA_SRC_DIR := $(SCA_DIR)/src/main/scala
 SCA_OUT_DIR := $(shell echo $(SCA_DIR)/target/scala-*)
+SCA_CLS_DIR := $(shell echo $(SCA_DIR)/target/scala-*/classes)
 
 #
 # Locating source files
@@ -182,6 +183,7 @@ clean:
 	rm -f $(F90OBJ) $(F90OUT) $(F90ASM) $(F90MOD) $(COBJ) $(COUT) $(CASM) $(CPRE) $(CCBC) $(RUSTOUT) $(JAVOUT) $(GOOUT) $(ADAOBJ) $(ADAALI) $(ADAOUT) $(HSKOUT) $(HSKOBJ) $(HSKINT) $(CPPOBJ) $(CPPOUT) $(CPPASM) $(CPPPRE) $(CPPCBC)
 	rm -rf $(KOT_OUT_DIR)
 	rm -rf $(SCA_DIR)/target
+	rm -f scalaprime*.class
 
 #
 # Stuff for profile guided optimisation
@@ -196,17 +198,18 @@ use-profile: LDFLAGS += $(USE_PROFILE_CFLAGS)
 use-profile: all
 
 
+test: MAX_NUMBER := 50000000
 test:
-	time ./$(COUT) 1000000
-	time ./$(CPPOUT) 1000000
-	time ./$(F90OUT) 1000000
-	time ./$(GOOUT) 1000000
-	time ./$(ADAOUT) 1000000
-	time ./$(HSKOUT) 1000000 +RTS -N$(shell grep -c ^processor /proc/cpuinfo)
-	time $(RUSTOUT) 1000000
-	time python3 $(PYSRC) 1000000
-	time node $(JSSRC) 1000000
-	time java $(subst ./,,$(JAVOUT:.class=)) 1000000
-	time scala $(SCAOUT) 1000000
-	time ruby $(RUBSRC) 1000
-	time $(KOTOUT) 1000
+	time ./$(COUT) $(MAX_NUMBER)
+	time ./$(CPPOUT) $(MAX_NUMBER)
+	time ./$(F90OUT) $(MAX_NUMBER)
+	time ./$(GOOUT) $(MAX_NUMBER)
+	time ./$(HSKOUT) $(MAX_NUMBER) +RTS -N$(shell nproc)
+	time $(RUSTOUT) $(MAX_NUMBER)
+	time java $(subst ./,,$(JAVOUT:.class=)) $(MAX_NUMBER)
+	time scala -classpath $(SCA_CLS_DIR) $(SCAOUT) $(MAX_NUMBER)
+	time python3 $(PYSRC) $(MAX_NUMBER)
+#time node $(JSSRC) $(MAX_NUMBER)   slow
+#time ruby $(RUBSRC) 1000 			slow
+#time $(KOTOUT) 1000 				slow
+#time ./$(ADAOUT) $(MAX_NUMBER) 	can't go above 2 million
