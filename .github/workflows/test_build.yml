@@ -27,7 +27,10 @@ jobs:
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
         curl -s "https://get.sdkman.io" | bash
         source "$HOME/.sdkman/bin/sdkman-init.sh"
-        sdk install kotlin gradle scala sbt
+        sdk install kotlin
+        sdk install gradle
+        sdk install scala
+        sdk install sbt
         sudo gem install parallel
 
     - name: Normal Compile
