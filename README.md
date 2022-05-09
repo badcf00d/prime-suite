@@ -1,6 +1,25 @@
 # prime-suite
 This shows an implementation of a prime number calculator written in many different languages to demonstrate how the same program compares when written different languages, as well as showing roughly how performant each language can be.
 
+### Results
+![Graph!](benchmark.png)
+
+---
+
+|   	                      | 1,000,000   | 2,500,000   |	5,000,000   |	10,000,000  | 25,000,000  |	50,000,000  |
+| ------------------------- | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- |
+| cuda	                    | 0.19        | 0.19        | 0.21        | **0.23**    | **0.33**    | **0.55**    |
+| fortran	                  | 0.029       | 0.078       |	**0.201**   |	0.538       |	2.073       |	5.825       |
+| c	                        | **0.026**   | **0.077**   |	**0.201**   |	0.541       |	2.089       |	5.856       |
+| c++	                      | 0.028       | 0.08        |	0.205       | 0.547       | 2.102       |	5.888       |
+| rust	                    | 0.032       | 0.087       |	0.214       |	0.571       |	2.213       |	6.362       |
+| java	                    | 0.104       | 0.142       |	0.265       |	0.634       |	2.358       |	6.651       |
+| go	                      | 0.21        | 0.505       |	0.909       |	1.631       |	4.305       |	10.859      |
+| scala	                    | 0.582       | 0.709       |	1.504       |	2.769       |	7.15        |	16.048      |
+| javascript (single-thread)| 0.14        | 0.449       |	1.182       |	3.248       |	12.597      |	35.41       |
+| haskell	                  | 0.172       | 0.393       |	0.928       |	2.091       |	15.79       |	53.871      |
+| python	                  | 0.589       | 1.945       |	5.08        |	13.48       |	51.34       |	142.172     |
+
 #### How to use
  - Install all of the prerequisites: `gfortran gcc g++ default-jdk go gnat haskell-platform nodejs python3 ruby-full`, [kotlin](https://kotlinlang.org/docs/tutorials/command-line.html), [gradle](https://gradle.org/install/), [scala](https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Linux.html) and [rustup](https://rustup.rs/)
    - You could use the commands from [actions script](https://github.com/badcf00d/prime-suite/blob/master/.github/workflows/test_build.yml) to install these.
@@ -50,7 +69,7 @@ This shows an implementation of a prime number calculator written in many differ
 
  🗙 **JavaScript** - Can spawn child processes through the `worker_threads` API, but does not have any sort of multi-threading support within a program.
 
- 🗙 **Kotlin Native** - The kotlinx-coroutines-core-native library does not support multi-threading so for the moment this version is broken until support is added, see issue https://github.com/Kotlin/kotlinx.coroutines/issues/462.
+ 🗙 **Kotlin Native** - The kotlinx-coroutines-core-native library supports multi-threading (see issue https://github.com/Kotlin/kotlinx.coroutines/issues/462), although currently it does not seem to utilize all cores.
 
  ✓ **C** - Supports OpenMP through `#pragma omp`.
 
